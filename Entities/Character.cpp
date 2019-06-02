@@ -6,7 +6,7 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
 void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(_sprite, states); }
 
 unsigned int Character::getCategory() const {
-  unsigned int collidable = getCollidable() == true ? Category::Collidable : Category::Collidable | Category::IgnoreWallCollide;
+  unsigned int collidable = true ? Category::Collidable : Category::Collidable | Category::IgnoreWallCollide;
   switch (_playerNumber) {
     case 1:
       return (Category::PlayerOne | collidable);

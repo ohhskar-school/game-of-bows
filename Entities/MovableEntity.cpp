@@ -28,10 +28,11 @@ sf::FloatRect MovableEntity::getBoundRect() const { return sf::FloatRect(); }
 void MovableEntity::updateCurrent(sf::Time dt) {
   move(_velocity * dt.asSeconds());
   addGravity(dt);
+  _velocity.x += 400.f * dt.asSeconds();
 }
 
 void MovableEntity::addGravity(sf::Time dt) {
-  if (_collidable) {
+  if (true){
     _velocity.y += 350.f * dt.asSeconds();
   }
 }
