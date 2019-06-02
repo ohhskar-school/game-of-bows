@@ -15,7 +15,6 @@ class Wall : public SpriteEntity {
   // For Collision
   unsigned int getCategory() const;
   virtual sf::FloatRect getBoundRect() const;
-  unsigned int getCell() const;
 
  private:
   sf::Sprite _sprite;

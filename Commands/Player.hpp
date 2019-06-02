@@ -28,6 +28,9 @@ class Player {
   std::map<Action, Command> _actionBindingPress;
   std::map<Action, Command> _actionBindingRelease;
 
+  unsigned int _vertical;
+  unsigned int _horizontal;
+
   void initializeActions();
   static bool isRealtimeAction(Action action);
 };

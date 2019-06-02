@@ -26,19 +26,6 @@ Textures::ID Wall::getSpriteSheet(Wall::Set set) {
   }
 }
 
-unsigned int Wall::getCell() const {
-  unsigned int cell = 0;
-  if (_position.x <= 768 / 2) {
-    cell = cell | 1 << 1;
-  }
-
-  if (_position.y <= 576 / 2) {
-    cell = cell | 1 << 0;
-  }
-
-  return cell;
-}
-
 sf::IntRect Wall::getSpriteBounds(Textures::WallSpecific& id) {
   switch (id) {
     case Textures::WallSpecific::Floor:

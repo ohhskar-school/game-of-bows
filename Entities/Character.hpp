@@ -4,12 +4,17 @@
 // User Created
 #include "../ResourceManager.hpp"
 #include "MovableEntity.hpp"
+#include "VisualArrow.hpp"
+#include "../Commands/CommandQueue.hpp"
 
 class Character : public MovableEntity {
  public:
   // Variable Declarations and Constructor
   enum Arch { Archer };
   explicit Character(Arch arch, unsigned int playerNumber, const TextureHolder& textures);
+
+  // Actions
+  Command setArrowAim;
 
   // Draws
   virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -18,7 +23,8 @@ class Character : public MovableEntity {
   unsigned int getCategory() const;
   virtual sf::FloatRect getBoundRect() const;
 
-  //Collision Handling
+  void aim(unsigned int y, unsigned int x, CommandQueue& commands);
+  // Collision Handling
   void handleWallCollision(sf::FloatRect wallBounds);
 
  private:
@@ -27,6 +33,12 @@ class Character : public MovableEntity {
   Arch _archetype;
   sf::Sprite _sprite;
   sf::RectangleShape _hitbox;
+
+  // Aiming & Arrow Values
+  float _arrowRotation;
+  sf::Vector2f _arrowPosition;
+  unsigned int _arrowQuantity;
+  bool _aiming;
 
   Textures::ID toTextureId(Character::Arch);
 };
