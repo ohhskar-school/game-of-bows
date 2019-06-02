@@ -6,13 +6,15 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
 void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(_sprite, states); }
 
 unsigned int Character::getCategory() const {
+  unsigned int collidable =
+      getCollidable() == true ? Category::Collidable : Category::Collidable | Category::IgnoreWallCollide;
   switch (_playerNumber) {
     case 1:
-      return Category::PlayerOne | Category::Collidable;
+      return (Category::PlayerOne | collidable);
     case 2:
-      return Category::PlayerTwo | Category::Collidable;
+      return (Category::PlayerTwo | collidable);
     default:
-      return Category::PlayerOne | Category::Collidable;
+      return (Category::PlayerOne | collidable);
   }
 }
 
@@ -43,17 +45,24 @@ void Character::handleWallCollision(sf::FloatRect wallBounds) {
   float left = ownRight - wallBounds.left;
   float right = wallRight - ownBounds.left;
   if (top < bot && top < left && top < right) {
-    setVelocity(0.f, 0.f);
     move(sf::Vector2f(0.f, -top));
+    setVelocity(0.f, false);
+    setCollidable(false);
+
   } else if (bot < top && bot < left && bot < right) {
-    setVelocity(0.f, 0.f);
     move(sf::Vector2f(0.f, bot));
+    setVelocity(0.f, false);
+    // disables wall collisions;
   } else if (left < right && left < top && left < bot) {
-    setVelocity(0.f, 0.f);
     move(sf::Vector2f(-left, 0.f));
+    setVelocity(0.f, true);
+
   } else if (right < left && right < top && right < bot) {
-    setVelocity(0.f, 0.f);
     move(sf::Vector2f(right, 0.f));
+    setVelocity(0.f, true);
   }
+
   // https://stackoverflow.com/questions/5062833/detecting-the-direction-of-a-collision
 }
+
+// Actions

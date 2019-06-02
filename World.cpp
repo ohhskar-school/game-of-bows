@@ -88,23 +88,10 @@ void World::update(sf::Time dt) {
   _sceneGraph.update(dt);
 }
 
-void World::handleCollisions() {
-  std::set<SceneNode::CollisionPair> collisionPairs;
-  _sceneGraph.checkSceneCollision(_sceneGraph, collisionPairs);
-  for (auto pair : collisionPairs) {
-    if (matchesCategories(pair, Category::PlayerOne, Category::Wall)) {
-      auto& player = static_cast<Character&>(*pair.first);
-      auto& wall = static_cast<Wall&>(*pair.second);
-      player.handleWallCollision(wall.getBoundRect());
-    }
-  }
-}
-
 // Getters
 CommandQueue& World::getCommandQueue() { return _commandQueue; }
 
 // Collisions
-
 bool matchesCategories(SceneNode::CollisionPair& colliders, Category::Type type1, Category::Type type2) {
   unsigned int category1 = colliders.first->getCategory();
   unsigned int category2 = colliders.second->getCategory();
@@ -115,5 +102,18 @@ bool matchesCategories(SceneNode::CollisionPair& colliders, Category::Type type1
     return true;
   } else {
     return false;
+  }
+}
+
+void World::handleCollisions() {
+  std::set<SceneNode::CollisionPair> collisionPairs;
+  _sceneGraph.checkSceneCollision(_sceneGraph, collisionPairs);
+  for (auto pair : collisionPairs) {
+    std::cout << "collisions" << std::endl;
+    if (matchesCategories(pair, Category::PlayerOne, Category::Wall)) {
+      auto& player = static_cast<Character&>(*pair.first);
+      auto& wall = static_cast<Wall&>(*pair.second);
+      player.handleWallCollision(wall.getBoundRect());
+    }
   }
 }

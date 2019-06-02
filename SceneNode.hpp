@@ -39,7 +39,7 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
   sf::Vector2f getWorldPosition() const;
   unsigned int getCell() const;
 
-  void checkNodeCollision(SceneNode& node, unsigned int cell, std::set<CollisionPair>& collisionPairs);
+  void checkNodeCollision(SceneNode& node, unsigned int cell, unsigned int category, std::set<CollisionPair>& collisionPairs);
   void checkSceneCollision(SceneNode& sceneGraph, std::set<CollisionPair>& collisionPairs);
 
   // For Control

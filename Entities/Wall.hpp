@@ -18,7 +18,7 @@ class Wall : public SpriteEntity {
   unsigned int getCell() const;
 
  private:
-   sf::Sprite _sprite;
+  sf::Sprite _sprite;
   sf::Vector2f _position;
 
   Textures::ID getSpriteSheet(Wall::Set);
