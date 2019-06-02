@@ -10,13 +10,15 @@ World::World(sf::RenderWindow& window)
       _sceneGraph(),
       _sceneLayers(),
       _textures(),
-      _player(nullptr) {
+      _player(nullptr),
+      _commandQueue() {
   _mapArray = mapOne;
   loadTextures();
   buildScene();
   _worldView.setCenter(_worldView.getSize().x / 2.f, _worldBounds.height - _worldView.getSize().y / 2.f);
 }
 
+// Initial Setting Up
 void World::loadTextures() {
   _textures.load(Textures::ID::Player, "Assets/character/player.png");
   _textures.load(Textures::ID::Background, "Assets/background/standardBG.png");
@@ -24,7 +26,6 @@ void World::loadTextures() {
   _textures.load(Textures::ID::Arrow, "Assets/arrow/arrow.png");
 }
 
-// ToDO
 void World::buildScene() {
   // Create main children layers
   for (std::size_t i = 0; i < LayerCount; ++i) {
@@ -73,15 +74,19 @@ void World::buildScene() {
   // mPlayer->attachChild(std::move(arrowSprite));
 }
 
+// Functions that update every tick
 void World::draw() {
   _window.setView(_worldView);
   _window.draw(_sceneGraph);
 }
 
 void World::update(sf::Time dt) {
-  // while (!mCommandQueue.isEmpty()) {
-  //   _sceneGraph.onCommand(mCommandQueue.pop(), dt);
-  // }
-  // handleCollisions();
+  while (!_commandQueue.isEmpty()) {
+    _sceneGraph.onCommand(_commandQueue.pop(), dt);
+  }
+  handleCollisions();
   _sceneGraph.update(dt);
 }
+
+// Getters
+CommandQueue& World::getCommandQueue() { return _commandQueue; }

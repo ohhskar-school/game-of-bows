@@ -16,6 +16,7 @@
 #include <SFML/System/Time.hpp>
 
 // User Created
+#include "Commands/Command.hpp"
 #include "Entities/Categories.hpp"
 
 class SceneNode : public sf::Transformable, public sf::Drawable, private sf::NonCopyable {
@@ -36,6 +37,10 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
   sf::Transform getWorldTransform() const;
   sf::Vector2f getWorldPosition() const;
 
+  // For Control
+
+  void onCommand(const Command& command, sf::Time dt);
+
  private:
   // Variable Declerations
   std::vector<NodePtr> _child;
@@ -45,7 +50,7 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
   virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
-  //Update Functions
+  // Update Functions
   virtual void updateCurrent(sf::Time dt);
   void updateChildren(sf::Time dt);
 };

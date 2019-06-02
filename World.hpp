@@ -6,14 +6,18 @@
 
 // User Defined
 
-//Entities
+// Entities
 #include "Entities/Character.hpp"
 #include "Entities/SpriteEntity.hpp"
 #include "Entities/Wall.hpp"
 
-//Maps
+// Commands
+#include "Commands/Command.hpp"
+#include "Commands/CommandQueue.hpp"
 
-//Everything Else
+// Maps
+
+// Everything Else
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
 
@@ -28,32 +32,34 @@ class World : private sf::NonCopyable {
 
   void handleCollisions();
 
-  // CommandQueue& getCommandQueue();
+  //Getters
+  CommandQueue& getCommandQueue();
 
  private:
   // Enums and Variables
   enum Layer { Background, Ground, Foreground, HUD, LayerCount };
 
-  //World Settings
+  // World Settings
   sf::RenderWindow& _window;
   sf::View _worldView;
   sf::FloatRect _worldBounds;
   sf::Vector2f _spawnPosition;
   float _scrollSpeed;
 
-  //Scenes
+  // Scenes
   SceneNode _sceneGraph;
   std::array<SceneNode*, LayerCount> _sceneLayers;
 
-  //Textures
+  // Textures
   TextureHolder _textures;
   std::array<std::array<Textures::WallSpecific, 24>, 18> _mapArray;
 
   Character* _player;
-  // CommandQueue mCommandQueue;
+  
+  //commands
+  CommandQueue _commandQueue;
 
   void loadTextures();
   void buildScene();
-
 };
 #endif

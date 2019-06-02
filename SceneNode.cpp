@@ -71,3 +71,15 @@ sf::Vector2f SceneNode::getWorldPosition() const {
   // Converts the transform into positions
   return getWorldTransform() * sf::Vector2f();
 }
+
+//Control Functions
+
+void SceneNode::onCommand(const Command& command, sf::Time dt) {
+  if (command.category == getCategory()) {
+    command.action(*this, dt);
+  }
+
+  for (const NodePtr& child : _child) {
+    child->onCommand(command, dt);
+  }
+}

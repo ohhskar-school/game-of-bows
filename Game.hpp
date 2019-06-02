@@ -4,6 +4,7 @@
 // SFML Modules
 #include <SFML/Graphics.hpp>
 
+#include "Commands/Player.hpp"
 #include "World.hpp"
 
 class Game {
@@ -18,6 +19,7 @@ class Game {
 
   sf::RenderWindow _window;
   World _world;
+  Player _player;
   static const sf::Time TimePerFrame;
 };
 

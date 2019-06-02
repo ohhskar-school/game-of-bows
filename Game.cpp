@@ -20,12 +20,17 @@ void Game::run() {
 
 // TODO
 void Game::processInput() {
+  CommandQueue& commands = _world.getCommandQueue();
+
   sf::Event event;
   while (_window.pollEvent(event)) {
+    _player.handleEvent(event, commands);
+
     if (event.type == sf::Event::Closed) {
       _window.close();
     }
   }
+  _player.handleRealtimeInput(commands);
 }
 void Game::update(sf::Time dt) { _world.update(dt); }
 
