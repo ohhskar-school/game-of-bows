@@ -15,10 +15,13 @@ class Wall : public SpriteEntity {
   // For Collision
   unsigned int getCategory() const;
   virtual sf::FloatRect getBoundRect() const;
+  unsigned int getCell() const;
 
  private:
+   sf::Sprite _sprite;
+  sf::Vector2f _position;
+
   Textures::ID getSpriteSheet(Wall::Set);
   sf::IntRect getSpriteBounds(Textures::WallSpecific&);
-  sf::Sprite _sprite;
 };
 #endif

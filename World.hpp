@@ -62,4 +62,7 @@ class World : private sf::NonCopyable {
   void loadTextures();
   void buildScene();
 };
+
+bool matchesCategories(SceneNode::CollisionPair& colliders, Category::Type type1, Category::Type type2);
+
 #endif

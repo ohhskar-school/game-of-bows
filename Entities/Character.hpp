@@ -18,6 +18,9 @@ class Character : public MovableEntity {
   unsigned int getCategory() const;
   virtual sf::FloatRect getBoundRect() const;
 
+  //Collision Handling
+  void handleWallCollision(sf::FloatRect wallBounds);
+
  private:
   // Variable Declarations
   unsigned int _playerNumber;

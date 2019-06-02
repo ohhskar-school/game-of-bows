@@ -26,6 +26,6 @@ sf::FloatRect MovableEntity::getBoundRect() const { return sf::FloatRect(); }
 void MovableEntity::updateCurrent(sf::Time dt) {
   move(_velocity * dt.asSeconds());
 
-  //Gravity
-  // _velocity.y += 250.f * dt.asSeconds();
+  // Gravity
+  _velocity.y += 350.f * dt.asSeconds();
 }

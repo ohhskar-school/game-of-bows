@@ -15,7 +15,7 @@ World::World(sf::RenderWindow& window)
   _mapArray = mapOne;
   loadTextures();
   buildScene();
-  _worldView.setCenter(_worldView.getSize().x / 2.f, _worldBounds.height - _worldView.getSize().y / 2.f);
+  _worldView.setCenter(_worldView.getSize().x / 2.f, _worldView.getSize().y / 2.f);
 }
 
 // Initial Setting Up
@@ -88,5 +88,32 @@ void World::update(sf::Time dt) {
   _sceneGraph.update(dt);
 }
 
+void World::handleCollisions() {
+  std::set<SceneNode::CollisionPair> collisionPairs;
+  _sceneGraph.checkSceneCollision(_sceneGraph, collisionPairs);
+  for (auto pair : collisionPairs) {
+    if (matchesCategories(pair, Category::PlayerOne, Category::Wall)) {
+      auto& player = static_cast<Character&>(*pair.first);
+      auto& wall = static_cast<Wall&>(*pair.second);
+      player.handleWallCollision(wall.getBoundRect());
+    }
+  }
+}
+
 // Getters
 CommandQueue& World::getCommandQueue() { return _commandQueue; }
+
+// Collisions
+
+bool matchesCategories(SceneNode::CollisionPair& colliders, Category::Type type1, Category::Type type2) {
+  unsigned int category1 = colliders.first->getCategory();
+  unsigned int category2 = colliders.second->getCategory();
+  if (type1 & category1 && type2 & category2) {
+    return true;
+  } else if (type1 & category2 && type2 & category1) {
+    std::swap(colliders.first, colliders.second);
+    return true;
+  } else {
+    return false;
+  }
+}

@@ -1,5 +1,5 @@
 #include "SceneNode.hpp"
-
+#include <iostream>
 SceneNode::SceneNode() : _parent(nullptr){};
 
 void SceneNode::attachChild(NodePtr child) {
@@ -55,7 +55,7 @@ void SceneNode::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) c
 
 // Getter Funcitions
 
-unsigned int SceneNode::getCategory() const { return Category::Scene; }
+unsigned int SceneNode::getCategory() const { return Category::Scene | Category::Collidable; }
 
 sf::FloatRect SceneNode::getBoundRect() const { return sf::FloatRect(); }
 
@@ -72,7 +72,21 @@ sf::Vector2f SceneNode::getWorldPosition() const {
   return getWorldTransform() * sf::Vector2f();
 }
 
-//Control Functions
+unsigned int SceneNode::getCell() const {
+  sf::Vector2f position = getWorldPosition();
+  unsigned int cell = 0;
+  if (position.x <= 768 / 2) {
+    cell = cell | 1 << 1;
+  }
+
+  if (position.y <= 576 / 2) {
+    cell = cell | 1 << 0;
+  }
+
+  return cell;
+}
+
+// Control Functions
 
 void SceneNode::onCommand(const Command& command, sf::Time dt) {
   if (command.category == getCategory()) {
@@ -81,5 +95,49 @@ void SceneNode::onCommand(const Command& command, sf::Time dt) {
 
   for (const NodePtr& child : _child) {
     child->onCommand(command, dt);
+  }
+}
+
+// Collision Functions
+bool collision(const SceneNode& lhs, const SceneNode& rhs) { return lhs.getBoundRect().intersects(rhs.getBoundRect()); }
+
+void SceneNode::checkNodeCollision(SceneNode& node, unsigned int cell, std::set<CollisionPair>& collisionPairs) {
+  // Checks if they are found in the same cell, and checks if the second node to be compared is also collidable
+
+  if (/*cell == this->getCell() && */(this->getCategory() & Category::Collidable) == Category::Collidable) {
+    // Since both objects are collidables,check if they collide and insert into the collision pair set
+    if (this != &node && collision(*this, node)) {
+      collisionPairs.insert(std::minmax(this, &node));
+    };
+
+    // Iterate to the next child
+    for (NodePtr& child : _child) {
+      child->checkNodeCollision(node, cell, collisionPairs);
+    };
+  }
+}
+
+void SceneNode::checkSceneCollision(SceneNode& sceneGraph, std::set<CollisionPair>& collisionPairs) {
+  // Gets the Category of the scene
+  unsigned int sceneCategory = sceneGraph.getCategory();
+  unsigned int sceneCell = sceneGraph.getCell();
+
+  // checks if the current node is a scene (i.e. it is one of the main nodes such as the root node or layer node). if it
+  // is then there is no need to check for collisions as by definition nothing should collide with it
+
+  bool checkNode = (sceneCategory & Category::Scene) == Category::Scene ? false : true;
+  // Only runs the collision check on the current node and its child nodes if it is collidable. Does not run a collision
+  // check if the current node is a wall as the other entities will check if they collide with the wall, lessening the
+  // amount of collisions to be checked
+
+  if ((sceneCategory & Category::Collidable) == Category::Collidable &&
+      (sceneCategory & Category::Wall) != Category::Wall) {
+    if (checkNode) {
+      checkNodeCollision(sceneGraph, sceneCell, collisionPairs);
+    }
+
+    for (NodePtr& child : sceneGraph._child) {
+      checkSceneCollision(*child, collisionPairs);
+    }
   }
 }

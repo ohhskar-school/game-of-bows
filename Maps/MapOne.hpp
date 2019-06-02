@@ -1,5 +1,5 @@
-#ifndef RC_WORLDMAP
-#define RC_WORLDMAP
+#ifndef RC_MAPONE
+#define RC_MAPONE
 
 #include <array>
 #include "../ResourceManager.hpp"

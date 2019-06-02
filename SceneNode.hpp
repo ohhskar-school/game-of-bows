@@ -3,6 +3,7 @@
 
 // C++ Datatypes
 #include <memory>
+#include <set>
 #include <vector>
 
 // Misc. C++ includes
@@ -32,13 +33,16 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
   void update(sf::Time dt);
 
   // For Collision / Getters
-  unsigned int getCategory() const;
+  virtual unsigned int getCategory() const;
   virtual sf::FloatRect getBoundRect() const;
   sf::Transform getWorldTransform() const;
   sf::Vector2f getWorldPosition() const;
+  unsigned int getCell() const;
+
+  void checkNodeCollision(SceneNode& node, unsigned int cell, std::set<CollisionPair>& collisionPairs);
+  void checkSceneCollision(SceneNode& sceneGraph, std::set<CollisionPair>& collisionPairs);
 
   // For Control
-
   void onCommand(const Command& command, sf::Time dt);
 
  private:
@@ -54,5 +58,7 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
   virtual void updateCurrent(sf::Time dt);
   void updateChildren(sf::Time dt);
 };
+
+bool collision(const SceneNode& lhs, const SceneNode& rhs);
 
 #endif

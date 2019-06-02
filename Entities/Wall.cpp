@@ -2,13 +2,15 @@
 #include <iostream>
 
 Wall::Wall(Set spriteSet, Textures::WallSpecific& tile, sf::Vector2f position, const TextureHolder& textures)
-    : _sprite(textures.get(getSpriteSheet(spriteSet)), getSpriteBounds(tile)) {
+    : _sprite(textures.get(getSpriteSheet(spriteSet)), getSpriteBounds(tile)), _position(position) {
   _sprite.setOrigin(sf::Vector2f(0.f, 0.f));
   _sprite.setPosition(position);
 }
 
 // Draws
-void Wall::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(_sprite, states); }
+void Wall::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const {
+  target.draw(_sprite, states);
+}
 
 // Getters
 unsigned int Wall::getCategory() const { return Category::Wall | Category::Collidable; }
@@ -22,6 +24,19 @@ Textures::ID Wall::getSpriteSheet(Wall::Set set) {
     default:
       return Textures::ID::WallStandard;
   }
+}
+
+unsigned int Wall::getCell() const {
+  unsigned int cell = 0;
+  if (_position.x <= 768 / 2) {
+    cell = cell | 1 << 1;
+  }
+
+  if (_position.y <= 576 / 2) {
+    cell = cell | 1 << 0;
+  }
+
+  return cell;
 }
 
 sf::IntRect Wall::getSpriteBounds(Textures::WallSpecific& id) {
