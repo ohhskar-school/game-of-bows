@@ -50,12 +50,13 @@ void MovableEntity::control(sf::Vector2f change) {
   if (_velocity.x < -240.f) {
     _velocity.x = -240.f;
   }
-  if(_velocity.y <= -250.f){
-    _velocity.y =  -250.f;
+  if (_velocity.y <= -250.f) {
+    _velocity.y = -250.f;
   }
   _collidable = true;
 }
 
-void MovableEntity::halt(){
+void MovableEntity::halt() {
   _velocity.x = 0.f;
+  _collidable = true;
 }

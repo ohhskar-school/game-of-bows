@@ -61,8 +61,9 @@ void Player::handleEvent(const sf::Event& event, CommandQueue& commands) {
 
 void Player::handleRealtimeInput(CommandQueue& commands) {
   for (auto& pair : _keyBinding) {
-    if (sf::Keyboard::isKeyPressed(pair.first) && isRealtimeAction(pair.second))
+    if (sf::Keyboard::isKeyPressed(pair.first) && isRealtimeAction(pair.second)) {
       commands.push(_actionBindingPress[pair.second]);
+    }
   }
 }
 
