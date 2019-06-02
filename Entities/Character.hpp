@@ -15,6 +15,7 @@ class Character : public MovableEntity {
 
   // Actions
   Command setArrowAim;
+  Command fireArrow;
 
   // Draws
   virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;

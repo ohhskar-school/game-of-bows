@@ -72,7 +72,10 @@ void World::buildScene() {
   std::unique_ptr<VisualArrow> arrowSprite(new VisualArrow(arrowTexture, arrowTextureRect));
   _player->attachChild(std::move(arrowSprite));
 
-  //Adding Arrow Holder
+  // Adding Arrow Holder
+  std::unique_ptr<ArrowHolder> arrow(new ArrowHolder());
+  SceneNode* arrowParent = arrow.get();
+  _sceneLayers[Foreground]->attachChild(std::move(arrow));
 }
 
 // Functions that update every tick

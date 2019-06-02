@@ -2,6 +2,7 @@
 #include <iostream>
 Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& textures)
     : setArrowAim(),
+      fireArrow(),
       _archetype(arch),
       _sprite(textures.get(toTextureId(arch))),
       _hitbox(sf::Vector2f(32.f, 48.f)),
@@ -10,6 +11,7 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
       _arrowQuantity(4),
       _aiming(false) {
   setArrowAim.category = Category::VisualArrow;
+  fireArrow.category = Category::ArrowHolder;
 }
 
 void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(_sprite, states); }
@@ -83,6 +85,18 @@ struct AimArrow {
 
   // Creating Constructor
   AimArrow(sf::Vector2f newPos, float newRot) : position(newPos), rotation(newRot) {}
+
+  // Making the operator
+  void operator()(VisualArrow& arrow, sf::Time) const { arrow.aim(position, rotation); }
+};
+
+struct FireArrow {
+  // Variable Declerations
+  sf::Vector2f position;
+  float rotation;
+
+  // Creating Constructor
+  FireArrow(sf::Vector2f newPos, float newRot) : position(newPos), rotation(newRot) {}
 
   // Making the operator
   void operator()(VisualArrow& arrow, sf::Time) const { arrow.aim(position, rotation); }

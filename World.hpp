@@ -11,6 +11,7 @@
 #include "Entities/SpriteEntity.hpp"
 #include "Entities/Wall.hpp"
 #include "Entities/VisualArrow.hpp"
+#include "Entities/ArrowHolder.hpp"
 
 // Commands
 #include "Commands/Command.hpp"
