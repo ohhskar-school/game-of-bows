@@ -27,5 +27,5 @@ void MovableEntity::updateCurrent(sf::Time dt) {
   move(_velocity * dt.asSeconds());
 
   //Gravity
-  _velocity.y += 250.f * dt.asSeconds();
+  // _velocity.y += 250.f * dt.asSeconds();
 }

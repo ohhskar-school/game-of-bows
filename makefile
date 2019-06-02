@@ -4,7 +4,7 @@ LDFLAGS=
 LIBFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 SOURCES=$(wildcard */*.cpp) $(wildcard *.cpp)
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=main
+EXECUTABLE=a
 BINDIR=/usr/bin
 
 all: $(SOURCES) $(EXECUTABLE)
