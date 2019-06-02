@@ -5,11 +5,30 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
 
+#include <algorithm>
+#include <cassert>
+#include <functional>
+#include <map>
+#include <vector>
+
+#include "../Commands/Player.hpp"
+#include "../ResourceManager.hpp"
+#include "../World.hpp"
+
+namespace States {
+enum ID { Title, Menu, Game, Over };
+};  // namespace States
+
 class State {
  public:
   typedef std::unique_ptr<State> Ptr;
   struct Context {
-    ...
+    //   Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player);
+    Context(sf::RenderWindow& window, TextureHolder& textures, Player& player);
+    sf::RenderWindow* window;
+    TextureHolder* textures;
+    //   FontHolder* fonts;
+    Player* player;
   };
 
  public:
@@ -18,6 +37,7 @@ class State {
   virtual void draw() = 0;
   virtual bool update(sf::Time dt) = 0;
   virtual bool handleEvent(const sf::Event& event) = 0;
+  bool centerOrigin(sf::Text text);
 
  protected:
   void requestStackPush(States::ID stateID);
@@ -56,7 +76,8 @@ class StateStack : private sf::NonCopyable {
 
  private:
   struct PendingChange {
-    ... Action action;
+    //   ...
+    Action action;
     States::ID stateID;
   };
 
@@ -67,47 +88,50 @@ class StateStack : private sf::NonCopyable {
   std::map<States::ID, std::function<State::Ptr()>> _Factories;
 };
 
-struct Context {
-  Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player);
-  sf::RenderWindow* window;
-  TextureHolder* textures;
-  FontHolder* fonts;
-  Player* player;
+class GameState : public State {
+ public:
+  GameState(StateStack& stack, Context context);
+  virtual void draw();
+  virtual bool update(sf::Time dt);
+  virtual bool handleEvent(const sf::Event& event);
+
+ private:
+  World _World;
+  Player& _Player;
 };
 
-template <typename T>
-void StateStack::registerState(States::ID stateID) {
-  _Factories[stateID] = [this]() { return State::Ptr(new T(*this, _Context)); };
-}
+class TitleState : public State {
+ public:
+  TitleState(StateStack& stack, Context context);
+  virtual void draw();
+  virtual bool update(sf::Time dt);
+  virtual bool handleEvent(const sf::Event& event);
 
-State::Ptr StateStack::createState(States::ID stateID) {
-  auto found = _Factories.find(stateID);
-  assert(found != _Factories.end());
-  return found->second();
-}
+ private:
+  sf::Sprite _BackgroundSprite;
+  sf::Text _Text;
+  bool _ShowText;
+  sf::Time _TextEffectTime;
+};
 
-void StateStack::handleEvent(const sf::Event& event) {
-  for (auto itr = _Stack.rbegin(); itr != _Stack.rend(); ++itr) {
-    if (!(*itr)->handleEvent(event)) return;
-  }
-  applyPendingChanges();
-}
+class MenuState : public State {
+ public:
+  MenuState(StateStack& stack, Context context);
+  virtual void draw();
+  virtual bool update(sf::Time dt);
+  virtual bool handleEvent(const sf::Event& event);
+  enum OptionNames {
+    Play,
+    Exit,
+  };
+  std::vector<sf::Text> _Options;
+  std::size_t _OptionIndex;
 
-void StateStack::applyPendingChanges() {
-  FOREACH(PendingChange change, _PendingList) {
-    switch (change.action) {
-      case Push:
-        _Stack.push_back(createState(change.stateID));
-        break;
-      case Pop:
-        _Stack.pop_back();
-        break;
-      case Clear:
-        _Stack.clear();
-        break;
-    }
-  }
-  _PendingList.clear();
-}
+ private:
+  sf::Sprite _BackgroundSprite;
+  sf::Text _Text;
+  bool _ShowText;
+  sf::Time _TextEffectTime;
+};
 
 #endif
