@@ -1,14 +1,28 @@
-// Misc. C++ includes
+// // Misc. C++ includes
+// #include <iostream>
+
+// // User Defined
+// #include "States/GameState.hpp"
+
+// int main(){
+//   try{
+//     GameState game();
+//     game.run();
+//   } catch (std::exception& e){
+//     std::cout << "\nException: " << e.what() << std::endl;
+//   }
+// }
+
+#include "Application.hpp"
+
 #include <iostream>
+#include <stdexcept>
 
-// User Defined
-#include "Game.hpp"
-
-int main(){
-  try{
-    Game game;
-    game.run();   
-  } catch (std::exception& e){
-    std::cout << "\nException: " << e.what() << std::endl;
+int main() {
+  try {
+    Application app;
+    app.run();
+  } catch (std::exception& e) {
+    std::cout << "\nEXCEPTION: " << e.what() << std::endl;
   }
 }

@@ -8,7 +8,7 @@
 
 // Resource Tables
 namespace Textures {
-enum ID { Player, Background, WallStandard, Arrow };
+enum ID { Player, Background, WallStandard, Arrow, TitleScreen };
 enum WallSpecific {
   None,
   Air,
@@ -35,6 +35,12 @@ enum WallSpecific {
 };
 }  // namespace Textures
 
+namespace Fonts {
+enum ID {
+  Main
+};
+}; // namespace Font
+
 template <typename Resource, typename Identifier>
 class ResourceHolder {
  public:
@@ -49,5 +55,8 @@ class ResourceHolder {
 // Explicitly create a TextureHolder class for compilation
 template class ResourceHolder<sf::Texture, Textures::ID>;
 typedef ResourceHolder<sf::Texture, Textures::ID> TextureHolder;
+
+template class ResourceHolder<sf::Font, Fonts::ID>;
+typedef ResourceHolder<sf::Font, Fonts::ID> FontHolder;
 
 #endif
