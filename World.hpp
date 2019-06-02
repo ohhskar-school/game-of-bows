@@ -10,6 +10,7 @@
 #include "Entities/Character.hpp"
 #include "Entities/SpriteEntity.hpp"
 #include "Entities/Wall.hpp"
+#include "Entities/VisualArrow.hpp"
 
 // Commands
 #include "Commands/Command.hpp"

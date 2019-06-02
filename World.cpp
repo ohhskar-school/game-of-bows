@@ -67,11 +67,10 @@ void World::buildScene() {
   _player->setVelocity(0.f, 0.f);
   _sceneLayers[Ground]->attachChild(std::move(player));
 
-  // sf::Texture& arrowTexture = mTextures.get(Textures::Arrow);
-  // sf::IntRect arrowTextureRect(0.f, 0.f, 32.f, 32.f);
-  // std::unique_ptr<SpriteNode> arrowSprite(new SpriteNode(arrowTexture, arrowTextureRect));
-  // arrowSprite->changeVisibility(false);
-  // mPlayer->attachChild(std::move(arrowSprite));
+  sf::Texture& arrowTexture = _textures.get(Textures::Arrow);
+  sf::IntRect arrowTextureRect(0.f, 0.f, 32.f, 32.f);
+  std::unique_ptr<VisualArrow> arrowSprite(new VisualArrow(arrowTexture, arrowTextureRect));
+  _player->attachChild(std::move(arrowSprite));
 }
 
 // Functions that update every tick
