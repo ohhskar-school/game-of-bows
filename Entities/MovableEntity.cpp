@@ -1,5 +1,7 @@
 #include "MovableEntity.hpp"
+#include <iostream>
 
+MovableEntity::MovableEntity() : _collidable(true) {}
 // Setters and Getters
 void MovableEntity::setVelocity(sf::Vector2f velocity) { _velocity = velocity; }
 
@@ -25,7 +27,15 @@ sf::FloatRect MovableEntity::getBoundRect() const { return sf::FloatRect(); }
 
 void MovableEntity::updateCurrent(sf::Time dt) {
   move(_velocity * dt.asSeconds());
-
-  // Gravity
-  _velocity.y += 350.f * dt.asSeconds();
+  addGravity(dt);
 }
+
+void MovableEntity::addGravity(sf::Time dt) {
+  if (_collidable) {
+    _velocity.y += 350.f * dt.asSeconds();
+  }
+}
+
+void MovableEntity::setCollidable(bool update) { _collidable = update; }
+
+bool MovableEntity::getCollidable() const { return _collidable; }

@@ -101,10 +101,12 @@ void SceneNode::onCommand(const Command& command, sf::Time dt) {
 // Collision Functions
 bool collision(const SceneNode& lhs, const SceneNode& rhs) { return lhs.getBoundRect().intersects(rhs.getBoundRect()); }
 
-void SceneNode::checkNodeCollision(SceneNode& node, unsigned int cell, std::set<CollisionPair>& collisionPairs) {
-  // Checks if they are found in the same cell, and checks if the second node to be compared is also collidable
-
-  if (/*cell == this->getCell() && */(this->getCategory() & Category::Collidable) == Category::Collidable) {
+void SceneNode::checkNodeCollision(SceneNode& node, unsigned int cell, unsigned int category,
+                                   std::set<CollisionPair>& collisionPairs) {
+  unsigned int thisCategory = this->getCategory();
+  if ((thisCategory & Category::Collidable) == Category::Collidable &&
+      !(((thisCategory & Category::Wall) == Category::Wall) &&
+      (category & Category::IgnoreWallCollide) == Category::IgnoreWallCollide) && (this->getCell() == cell)) {
     // Since both objects are collidables,check if they collide and insert into the collision pair set
     if (this != &node && collision(*this, node)) {
       collisionPairs.insert(std::minmax(this, &node));
@@ -112,7 +114,7 @@ void SceneNode::checkNodeCollision(SceneNode& node, unsigned int cell, std::set<
 
     // Iterate to the next child
     for (NodePtr& child : _child) {
-      child->checkNodeCollision(node, cell, collisionPairs);
+      child->checkNodeCollision(node, cell, category, collisionPairs);
     };
   }
 }
@@ -133,7 +135,7 @@ void SceneNode::checkSceneCollision(SceneNode& sceneGraph, std::set<CollisionPai
   if ((sceneCategory & Category::Collidable) == Category::Collidable &&
       (sceneCategory & Category::Wall) != Category::Wall) {
     if (checkNode) {
-      checkNodeCollision(sceneGraph, sceneCell, collisionPairs);
+      checkNodeCollision(sceneGraph, sceneCell, sceneCategory, collisionPairs);
     }
 
     for (NodePtr& child : sceneGraph._child) {
