@@ -7,8 +7,13 @@
 
 class SpriteEntity : public SceneNode {
  public:
-  //Draws
-  
+  // Constructor
+  SpriteEntity();
+  SpriteEntity(const sf::Texture& texture);
+  SpriteEntity(const sf::Texture& texture, const sf::IntRect& textureRect);
+  // Draws
+  void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
+
   // For Collision
   unsigned int getCategory() const;
   virtual sf::FloatRect getBoundRect() const;

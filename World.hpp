@@ -5,7 +5,15 @@
 #include <SFML/System/NonCopyable.hpp>
 
 // User Defined
+
+//Entities
 #include "Entities/Character.hpp"
+#include "Entities/SpriteEntity.hpp"
+#include "Entities/Wall.hpp"
+
+//Maps
+
+//Everything Else
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
 

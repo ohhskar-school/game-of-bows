@@ -1,7 +1,9 @@
 #include "Wall.hpp"
+#include <iostream>
 
 Wall::Wall(Set spriteSet, Textures::WallSpecific& tile, sf::Vector2f position, const TextureHolder& textures)
     : _sprite(textures.get(getSpriteSheet(spriteSet)), getSpriteBounds(tile)) {
+  _sprite.setOrigin(sf::Vector2f(0.f, 0.f));
   _sprite.setPosition(position);
 }
 
@@ -64,8 +66,6 @@ sf::IntRect Wall::getSpriteBounds(Textures::WallSpecific& id) {
       return sf::IntRect(64, 128, 32, 32);
     case Textures::WallSpecific::ChunkSixteen:
       return sf::IntRect(96, 128, 32, 32);
-    case Textures::WallSpecific::Air:
-      return sf::IntRect(0, 160, 32, 32);
     default:
       return sf::IntRect(0, 0, 32, 32);
   }
