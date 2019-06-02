@@ -71,6 +71,8 @@ void World::buildScene() {
   sf::IntRect arrowTextureRect(0.f, 0.f, 32.f, 32.f);
   std::unique_ptr<VisualArrow> arrowSprite(new VisualArrow(arrowTexture, arrowTextureRect));
   _player->attachChild(std::move(arrowSprite));
+
+  //Adding Arrow Holder
 }
 
 // Functions that update every tick
