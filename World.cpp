@@ -88,7 +88,6 @@ void World::update(sf::Time dt) {
   _sceneGraph.update(dt);
 }
 
-
 // Getters
 CommandQueue& World::getCommandQueue() { return _commandQueue; }
 
@@ -105,7 +104,6 @@ bool matchesCategories(SceneNode::CollisionPair& colliders, Category::Type type1
     return false;
   }
 }
-
 
 void World::handleCollisions() {
   std::set<SceneNode::CollisionPair> collisionPairs;

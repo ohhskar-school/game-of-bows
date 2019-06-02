@@ -32,10 +32,30 @@ void MovableEntity::updateCurrent(sf::Time dt) {
 
 void MovableEntity::addGravity(sf::Time dt) {
   if (_collidable) {
-    _velocity.y += 350.f * dt.asSeconds();
+    _velocity.y += 500.f * dt.asSeconds();
   }
 }
 
 void MovableEntity::setCollidable(bool update) { _collidable = update; }
 
 bool MovableEntity::getCollidable() const { return _collidable; }
+
+// Actions
+
+void MovableEntity::control(sf::Vector2f change) {
+  _velocity += change;
+  if (_velocity.x > 240.f) {
+    _velocity.x = 240.f;
+  }
+  if (_velocity.x < -240.f) {
+    _velocity.x = -240.f;
+  }
+  if(_velocity.y <= -250.f){
+    _velocity.y =  -250.f;
+  }
+  _collidable = true;
+}
+
+void MovableEntity::halt(){
+  _velocity.x = 0.f;
+}

@@ -19,9 +19,12 @@ class MovableEntity : public SceneNode {
   // For Collision
   unsigned int getCategory() const;
   virtual sf::FloatRect getBoundRect() const;
-  
   void setCollidable(bool update);
   bool getCollidable() const;
+
+  // Actions
+  void control(sf::Vector2f change);
+  void halt();
 
  private:
   sf::Vector2f _velocity;

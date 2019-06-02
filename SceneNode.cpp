@@ -89,7 +89,7 @@ unsigned int SceneNode::getCell() const {
 // Control Functions
 
 void SceneNode::onCommand(const Command& command, sf::Time dt) {
-  if (command.category == getCategory()) {
+  if ((command.category & getCategory()) == command.category) {
     command.action(*this, dt);
   }
 
@@ -106,7 +106,7 @@ void SceneNode::checkNodeCollision(SceneNode& node, unsigned int cell, unsigned 
   unsigned int thisCategory = this->getCategory();
   if ((thisCategory & Category::Collidable) == Category::Collidable &&
       !(((thisCategory & Category::Wall) == Category::Wall) &&
-      (category & Category::IgnoreWallCollide) == Category::IgnoreWallCollide) && (this->getCell() == cell)) {
+        (category & Category::IgnoreWallCollide) == Category::IgnoreWallCollide)) {
     // Since both objects are collidables,check if they collide and insert into the collision pair set
     if (this != &node && collision(*this, node)) {
       collisionPairs.insert(std::minmax(this, &node));
