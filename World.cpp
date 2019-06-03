@@ -9,12 +9,14 @@ World::World(sf::RenderWindow& window)
     : _window(window),
       _worldView(window.getDefaultView()),
       _worldBounds(0.f, 0.f, _worldView.getSize().x, _worldView.getSize().y),
-      _spawnPosition(32.f, 64.f),
+      _spawnPosition1(32.f, 64.f),
+      _spawnPosition2(128.f, 64.f),
       _scrollSpeed(-50.f),
       _sceneGraph(),
       _sceneLayers(),
       _textures(),
-      _player(nullptr),
+      _player1(nullptr),
+      _player2(nullptr),
       _commandQueue() {
   srand((unsigned)time(0));
   _randValue = rand() % 4;
@@ -127,17 +129,27 @@ void World::buildScene() {
     i++;
   }
 
-  // Adding Player
-  std::unique_ptr<Character> player(new Character(Character::Arch::Archer, 1, _textures));
-  _player = player.get();
-  _player->setPosition(_spawnPosition);
-  _player->setVelocity(0.f, 0.f);
-  _sceneLayers[Ground]->attachChild(std::move(player));
+  // Adding Player 1
+  std::unique_ptr<Character> player1(new Character(Character::Arch::Archer, 1, _textures));
+  _player1 = player1.get();
+  _player1->setPosition(_spawnPosition1);
+  _player1->setVelocity(0.f, 0.f);
+  _sceneLayers[Ground]->attachChild(std::move(player1));
 
   sf::Texture& arrowTexture = _textures.get(Textures::Arrow);
   sf::IntRect arrowTextureRect(0.f, 0.f, 32.f, 32.f);
-  std::unique_ptr<VisualArrow> arrowSprite(new VisualArrow(arrowTexture, arrowTextureRect));
-  _player->attachChild(std::move(arrowSprite));
+  std::unique_ptr<VisualArrow> arrowSprite1(new VisualArrow(arrowTexture, arrowTextureRect, 1));
+  _player1->attachChild(std::move(arrowSprite1));
+
+  //Adding Player 2
+  std::unique_ptr<Character> player2(new Character(Character::Arch::Archer, 2, _textures));
+  _player2 = player2.get();
+  _player2->setPosition(_spawnPosition2);
+  _player2->setVelocity(0.f, 0.f);
+  _sceneLayers[Ground]->attachChild(std::move(player2));
+
+  std::unique_ptr<VisualArrow> arrowSprite2(new VisualArrow(arrowTexture, arrowTextureRect, 2));
+  _player2->attachChild(std::move(arrowSprite2));
 
   // Adding Arrow Holder
   std::unique_ptr<ArrowHolder> arrow(new ArrowHolder());

@@ -19,7 +19,18 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
       _countdown(sf::Time::Zero),
       _dead(false) {
   // Creating Actions
-  setArrowAim.category = Category::VisualArrow;
+
+  switch (_playerNumber) {
+    case 1:
+      setArrowAim.category = Category::VisualArrowOne;
+      break;
+    case 2:
+      setArrowAim.category = Category::VisualArrowTwo;
+      break;
+    default:
+      setArrowAim.category = Category::VisualArrowOne;
+      break;
+  }
   fireArrow.category = Category::ArrowHolder;
   fireArrow.action = [this, &textures](SceneNode& node, sf::Time) { createProjectile(node, textures); };
 
@@ -78,6 +89,7 @@ unsigned int Character::getCategory() const {
       return (Category::PlayerTwo | collidable);
     default:
       return (Category::PlayerOne | collidable);
+      std::cout << "defualt" << std::endl;
   }
 }
 

@@ -46,7 +46,8 @@ class World : private sf::NonCopyable {
   sf::RenderWindow& _window;
   sf::View _worldView;
   sf::FloatRect _worldBounds;
-  sf::Vector2f _spawnPosition;
+  sf::Vector2f _spawnPosition1;
+  sf::Vector2f _spawnPosition2;
   float _scrollSpeed;
 
   // Scenes
@@ -57,7 +58,8 @@ class World : private sf::NonCopyable {
   TextureHolder _textures;
   std::array<std::array<Textures::WallSpecific, 24>, 18> _mapArray;
 
-  Character* _player;
+  Character* _player1;
+  Character* _player2;
 
   // commands
   CommandQueue _commandQueue;
