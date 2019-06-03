@@ -24,8 +24,7 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
   // _hitbox.setFillColor(sf::Color::White);
   setArrowAim.category = Category::VisualArrow;
   fireArrow.category = Category::ArrowHolder;
-  fireArrow.action = [this, &textures](SceneNode& node, sf::Time) {
-    createProjectile(node, textures); };
+  fireArrow.action = [this, &textures](SceneNode& node, sf::Time) { createProjectile(node, textures); };
 
   // Creating Animations
   _idle.setFrameSize(sf::Vector2i(48, 32));
@@ -197,8 +196,8 @@ void Character::aim(unsigned int y, unsigned int x, CommandQueue& commands) {
         _arrowRotation = 135.f;
         _arrowPosition.x = 6.f;
         _arrowPosition.y = 47.f;
-
       } else if (y == 1) {
+        _aiming = true;
         _arrowRotation = 225.f;
         _arrowPosition.x = -10.f;
         _arrowPosition.y = 10.f;
@@ -236,12 +235,11 @@ void Character::aim(unsigned int y, unsigned int x, CommandQueue& commands) {
         _arrowPosition.y = -1000.f;
       }
     }
-  } 
-  // else {
-  //   _aiming = false;
-  //   _arrowPosition.x = -1000.f;
-  //   _arrowPosition.y = -1000.f;
-  // }
+  } else {
+    _aiming = false;
+    _arrowPosition.x = -1000.f;
+    _arrowPosition.y = -1000.f;
+  }
   // Creating the command
   setArrowAim.action = derivedAction<VisualArrow>(AimArrow(_arrowPosition, _arrowRotation));
   commands.push(setArrowAim);
@@ -259,6 +257,8 @@ void Character::createProjectile(SceneNode& node, const TextureHolder& textures)
 void Character::fire() {
   if (_aiming && _arrowQuantity > 0) {
     _firing = true;
+  } else {
+    _firing = false;
   }
 }
 
