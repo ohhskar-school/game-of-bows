@@ -31,10 +31,28 @@ struct Aim {
   void operator()(Character& player, sf::Time) const { player.aim(_vert, _hori, passed); }
 };
 
+struct FireArrow {
+  // Creating Constructor
+  FireArrow() {}
+
+  // Making the operator
+  void operator()(Character& player, sf::Time) const { player.fire(); }
+};
+
+struct DoNothing {
+  // Creating Constructor
+  DoNothing() {}
+
+  // Making the operator
+  void operator()(Character& player, sf::Time) const { }
+};
+
+
 Player::Player() : _vertical(0), _horizontal(0) {
   _keyBinding[sf::Keyboard::A] = MoveLeft;
   _keyBinding[sf::Keyboard::D] = MoveRight;
   _keyBinding[sf::Keyboard::W] = Jump;
+  _keyBinding[sf::Keyboard::Space] = Fire;
 
   initializeActions();
   for (auto& pair : _actionBindingPress) {
@@ -49,9 +67,11 @@ void Player::initializeActions() {
   _actionBindingPress[MoveLeft].action = derivedAction<Character>(MovePlayer(-250.f, 0.f));
   _actionBindingPress[MoveRight].action = derivedAction<Character>(MovePlayer(250.f, 0.f));
   _actionBindingPress[Jump].action = derivedAction<Character>(MovePlayer(0.f, -250.f));
+  _actionBindingPress[Fire].action = derivedAction<Character>(FireArrow());
   _actionBindingRelease[MoveLeft].action = derivedAction<Character>(Halt());
   _actionBindingRelease[MoveRight].action = derivedAction<Character>(Halt());
   _actionBindingRelease[Jump].action = derivedAction<Character>(MovePlayer(0.f, 0.f));
+  _actionBindingRelease[Fire].action = derivedAction<Character>(DoNothing());
 }
 
 void Player::handleEvent(const sf::Event& event, CommandQueue& commands) {

@@ -74,7 +74,6 @@ void World::buildScene() {
 
   // Adding Arrow Holder
   std::unique_ptr<ArrowHolder> arrow(new ArrowHolder());
-  SceneNode* arrowParent = arrow.get();
   _sceneLayers[Foreground]->attachChild(std::move(arrow));
 }
 
@@ -89,7 +88,8 @@ void World::update(sf::Time dt) {
     _sceneGraph.onCommand(_commandQueue.pop(), dt);
   }
   handleCollisions();
-  _sceneGraph.update(dt);
+  _sceneGraph.removeArrows();
+  _sceneGraph.update(dt, _commandQueue);
 }
 
 // Getters
@@ -114,10 +114,25 @@ void World::handleCollisions() {
   _sceneGraph.checkSceneCollision(_sceneGraph, collisionPairs);
   for (auto pair : collisionPairs) {
     std::cout << "collisions" << std::endl;
-    if (matchesCategories(pair, Category::PlayerOne, Category::Wall)) {
+    // Player Collisions
+    if (matchesCategories(pair, Category::Player, Category::Wall)) {
       auto& player = static_cast<Character&>(*pair.first);
       auto& wall = static_cast<Wall&>(*pair.second);
       player.handleWallCollision(wall.getBoundRect());
+    }
+
+    if (matchesCategories(pair, Category::Player, Category::Arrow)) {
+      auto& player = static_cast<Character&>(*pair.first);
+      auto& arrow = static_cast<Projectile&>(*pair.second);
+      arrow.handlePlayerCollision();
+      player.handleArrowCollision(!arrow.getCollidable());
+    }
+
+    //Arrow Collisions
+    if (matchesCategories(pair, Category::Arrow, Category::Wall)) {
+      auto& arrow = static_cast<Projectile&>(*pair.first);
+      auto& wall = static_cast<Wall&>(*pair.second);
+      arrow.handleWallCollision(wall.getBoundRect());
     }
   }
 }

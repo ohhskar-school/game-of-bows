@@ -25,7 +25,7 @@ unsigned int MovableEntity::getCategory() const { return Category::Collidable; }
 
 sf::FloatRect MovableEntity::getBoundRect() const { return sf::FloatRect(); }
 
-void MovableEntity::updateCurrent(sf::Time dt) {
+void MovableEntity::updateCurrent(sf::Time dt, CommandQueue& commands) {
   move(_velocity * dt.asSeconds());
   addGravity(dt);
 }

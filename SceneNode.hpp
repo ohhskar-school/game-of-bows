@@ -19,6 +19,7 @@
 // User Created
 #include "Commands/Command.hpp"
 #include "Entities/Categories.hpp"
+#include "Commands/CommandQueue.hpp"
 
 class SceneNode : public sf::Transformable, public sf::Drawable, private sf::NonCopyable {
  public:
@@ -30,7 +31,7 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
   // Tree Manipulating Functions
   void attachChild(NodePtr);
   NodePtr detachChild(const SceneNode& node);
-  void update(sf::Time dt);
+  void update(sf::Time dt, CommandQueue& commands);
 
   // For Collision / Getters
   virtual unsigned int getCategory() const;
@@ -45,6 +46,10 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
   // For Control
   void onCommand(const Command& command, sf::Time dt);
 
+  // For Deletion
+  virtual bool isDestroyed() const;
+  void removeArrows();
+
  private:
   // Variable Declerations
   std::vector<NodePtr> _child;
@@ -55,8 +60,8 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
   virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 
   // Update Functions
-  virtual void updateCurrent(sf::Time dt);
-  void updateChildren(sf::Time dt);
+  virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
+  void updateChildren(sf::Time dt, CommandQueue& commands);
 };
 
 bool collision(const SceneNode& lhs, const SceneNode& rhs);

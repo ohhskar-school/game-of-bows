@@ -3,15 +3,27 @@
 Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& textures)
     : setArrowAim(),
       fireArrow(),
+      _playerNumber(playerNumber),
       _archetype(arch),
       _sprite(textures.get(toTextureId(arch))),
       _hitbox(sf::Vector2f(32.f, 48.f)),
       _arrowRotation(0.f),
       _arrowPosition(sf::Vector2f(0.f, 0.f)),
       _arrowQuantity(4),
-      _aiming(false) {
+      _aiming(false),
+      _firing(false),
+      _countdown(sf::Time::Zero),
+      _dead(false) {
   setArrowAim.category = Category::VisualArrow;
   fireArrow.category = Category::ArrowHolder;
+  fireArrow.action = [this, &textures](SceneNode& node, sf::Time) { createProjectile(node, textures); };
+}
+
+// Draws and Updates
+
+void Character::updateCurrent(sf::Time dt, CommandQueue& commands) {
+  checkProjectileLaunch(dt, commands);
+  MovableEntity::updateCurrent(dt, commands);
 }
 
 void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(_sprite, states); }
@@ -76,6 +88,15 @@ void Character::handleWallCollision(sf::FloatRect wallBounds) {
   // https://stackoverflow.com/questions/5062833/detecting-the-direction-of-a-collision
 }
 
+void Character::handleArrowCollision(bool grabbable){
+  if(grabbable){
+    _arrowQuantity++;
+    std::cout << _arrowQuantity << std::endl;
+  } else {
+    _dead = true;
+  }
+}
+
 // Actions
 
 struct AimArrow {
@@ -90,22 +111,9 @@ struct AimArrow {
   void operator()(VisualArrow& arrow, sf::Time) const { arrow.aim(position, rotation); }
 };
 
-struct FireArrow {
-  // Variable Declerations
-  sf::Vector2f position;
-  float rotation;
-
-  // Creating Constructor
-  FireArrow(sf::Vector2f newPos, float newRot) : position(newPos), rotation(newRot) {}
-
-  // Making the operator
-  void operator()(VisualArrow& arrow, sf::Time) const { arrow.aim(position, rotation); }
-};
-
 void Character::aim(unsigned int y, unsigned int x, CommandQueue& commands) {
   _aiming = true;
   _arrowRotation = 0.f;
-  std::cout << y << " " << x << std::endl;
   if (_arrowQuantity > 0) {
     if (x == 1) {
       if (y == 2) {
@@ -156,8 +164,33 @@ void Character::aim(unsigned int y, unsigned int x, CommandQueue& commands) {
     _arrowPosition.x = -1000.f;
     _arrowPosition.y = -1000.f;
   }
-  std::cout << _arrowPosition.x << " " << _arrowPosition.y << std::endl;
   // Creating the command
   setArrowAim.action = derivedAction<VisualArrow>(AimArrow(_arrowPosition, _arrowRotation));
   commands.push(setArrowAim);
+}
+
+void Character::createProjectile(SceneNode& node, const TextureHolder& textures) const {
+  std::unique_ptr<Projectile> projectile(new Projectile(textures, _arrowRotation, _arrowPosition));
+
+  sf::Vector2f finalOffset(getBoundRect().left + _arrowPosition.x, getBoundRect().top + _arrowPosition.y);
+
+  projectile->setPosition(finalOffset);
+  node.attachChild(std::move(projectile));
+}
+
+void Character::fire() {
+  if (_aiming && _arrowQuantity > 0) {
+    _firing = true;
+  }
+}
+
+void Character::checkProjectileLaunch(sf::Time dt, CommandQueue& commands) {
+  if (_firing && _countdown <= sf::Time::Zero) {
+    commands.push(fireArrow);
+    _countdown += sf::seconds(1.f / 10.f);
+    _firing = false;
+    _arrowQuantity--;
+  } else if (_countdown > sf::Time::Zero) {
+    _countdown -= dt;
+  }
 }
