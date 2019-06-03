@@ -32,7 +32,7 @@ void MovableEntity::updateCurrent(sf::Time dt, CommandQueue& commands) {
 
 void MovableEntity::addGravity(sf::Time dt) {
   if (_collidable) {
-    _velocity.y += 500.f * dt.asSeconds();
+    _velocity.y += 650.f * dt.asSeconds();
   }
 }
 
@@ -50,8 +50,8 @@ void MovableEntity::control(sf::Vector2f change) {
   if (_velocity.x < -240.f) {
     _velocity.x = -240.f;
   }
-  if (_velocity.y <= -250.f) {
-    _velocity.y = -250.f;
+  if (_velocity.y <= -300.f) {
+    _velocity.y = -300.f;
   }
   _collidable = true;
 }
