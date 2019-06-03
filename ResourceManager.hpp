@@ -8,7 +8,34 @@
 
 // Resource Tables
 namespace Textures {
-enum ID { Player, Background, WallStandard, Arrow };
+enum ID {
+  //Blue Player Animations
+  BlueRun,
+  BlueIdle,
+  BlueJump,
+  BlueDeath,
+
+  //Pink Player Animations
+  PinkRun,
+  PinkIdle,
+  PinkJump,
+  PinkDeath,
+
+  //Wall Textures
+  PurpleWall,
+  PurpleBG,
+
+  GreenWall,
+  GreenBG,
+
+  BlueWall,
+  BlueBG,
+
+  OrangeWall,
+  OrangeBG,
+  
+  Arrow
+};
 enum WallSpecific {
   None,
   Air,

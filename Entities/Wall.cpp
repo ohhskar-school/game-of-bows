@@ -20,9 +20,9 @@ sf::FloatRect Wall::getBoundRect() const { return getWorldTransform().transformR
 Textures::ID Wall::getSpriteSheet(Wall::Set set) {
   switch (set) {
     case Wall::Set::Standard:
-      return Textures::ID::WallStandard;
+      return Textures::ID::PurpleWall;
     default:
-      return Textures::ID::WallStandard;
+      return Textures::ID::PurpleWall;
   }
 }
 

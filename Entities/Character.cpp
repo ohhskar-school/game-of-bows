@@ -47,9 +47,9 @@ sf::FloatRect Character::getBoundRect() const { return getWorldTransform().trans
 Textures::ID Character::toTextureId(Character::Arch arch) {
   switch (arch) {
     case Character::Arch::Archer:
-      return Textures::Player;
+      return Textures::BlueIdle;
     default:
-      return Textures::Player;
+      return Textures::BlueIdle;
   }
 }
 

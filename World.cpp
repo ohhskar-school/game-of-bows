@@ -20,9 +20,33 @@ World::World(sf::RenderWindow& window)
 
 // Initial Setting Up
 void World::loadTextures() {
-  _textures.load(Textures::ID::Player, "Assets/character/player.png");
-  _textures.load(Textures::ID::Background, "Assets/background/standardBG.png");
-  _textures.load(Textures::ID::WallStandard, "Assets/background/standard.png");
+  // Player Animations
+  // Blue
+  _textures.load(Textures::ID::BlueRun, "Assets/character/BlueRun.png");
+  _textures.load(Textures::ID::BlueJump, "Assets/character/BlueJump.png");
+  _textures.load(Textures::ID::BlueIdle, "Assets/character/BlueIdle.png");
+  _textures.load(Textures::ID::BlueDeath, "Assets/character/BlueDeath.png");
+
+  // Pink
+  _textures.load(Textures::ID::PinkRun, "Assets/character/PinkRun.png");
+  _textures.load(Textures::ID::PinkJump, "Assets/character/PinkJump.png");
+  _textures.load(Textures::ID::PinkIdle, "Assets/character/PinkIdle.png");
+  _textures.load(Textures::ID::PinkDeath, "Assets/character/PinkDeath.png");
+
+  // Stage
+  _textures.load(Textures::ID::PurpleWall, "Assets/background/PurpleWall.png");
+  _textures.load(Textures::ID::PurpleBG, "Assets/background/PurpleBG.png");
+
+  // _textures.load(Textures::ID::GreenWall, "Assets/character/player.png");
+  // _textures.load(Textures::ID::GreenBG, "Assets/background/standardBG.png");
+
+  // _textures.load(Textures::ID::BlueWall, "Assets/character/player.png");
+  // _textures.load(Textures::ID::BlueBG, "Assets/background/standardBG.png");
+
+  // _textures.load(Textures::ID::OrangeWall, "Assets/character/player.png");
+  // _textures.load(Textures::ID::OrangeBG, "Assets/background/standardBG.png");
+
+  //Arrow
   _textures.load(Textures::ID::Arrow, "Assets/arrow/arrow.png");
 }
 
@@ -35,7 +59,7 @@ void World::buildScene() {
   }
 
   // Setting Background
-  sf::Texture& texture = _textures.get(Textures::Background);
+  sf::Texture& texture = _textures.get(Textures::PurpleBG);
   sf::IntRect textureRect(_worldBounds);
   std::unique_ptr<SpriteEntity> backgroundSprite(new SpriteEntity(texture, textureRect));
   backgroundSprite->setPosition(_worldBounds.left, _worldBounds.top);
@@ -128,7 +152,7 @@ void World::handleCollisions() {
       player.handleArrowCollision(!arrow.getCollidable());
     }
 
-    //Arrow Collisions
+    // Arrow Collisions
     if (matchesCategories(pair, Category::Arrow, Category::Wall)) {
       auto& arrow = static_cast<Projectile&>(*pair.first);
       auto& wall = static_cast<Wall&>(*pair.second);
