@@ -28,8 +28,8 @@ enum ID {
   GreenWall,
   GreenBG,
 
-  BlueWall,
-  BlueBG,
+  RedWall,
+  RedBG,
 
   OrangeWall,
   OrangeBG,

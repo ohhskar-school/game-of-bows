@@ -1,23 +1,24 @@
 #ifndef RC_WORLD
 #define RC_WORLD
 
+// For Random
+#include <cstdlib>
+#include <ctime>
 // SFML Modules
 #include <SFML/System/NonCopyable.hpp>
 
 // User Defined
 
 // Entities
+#include "Entities/ArrowHolder.hpp"
 #include "Entities/Character.hpp"
 #include "Entities/SpriteEntity.hpp"
-#include "Entities/Wall.hpp"
 #include "Entities/VisualArrow.hpp"
-#include "Entities/ArrowHolder.hpp"
+#include "Entities/Wall.hpp"
 
 // Commands
 #include "Commands/Command.hpp"
 #include "Commands/CommandQueue.hpp"
-
-// Maps
 
 // Everything Else
 #include "ResourceManager.hpp"
@@ -34,7 +35,7 @@ class World : private sf::NonCopyable {
 
   void handleCollisions();
 
-  //Getters
+  // Getters
   CommandQueue& getCommandQueue();
 
  private:
@@ -57,9 +58,11 @@ class World : private sf::NonCopyable {
   std::array<std::array<Textures::WallSpecific, 24>, 18> _mapArray;
 
   Character* _player;
-  
-  //commands
+
+  // commands
   CommandQueue _commandQueue;
+
+  unsigned int _randValue;
 
   void loadTextures();
   void buildScene();

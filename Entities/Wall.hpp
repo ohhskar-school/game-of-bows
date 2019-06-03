@@ -6,7 +6,7 @@
 
 class Wall : public SpriteEntity {
  public:
-  enum Set { Standard };
+  enum Set { Purple, Green, Red, Orange };
   explicit Wall(Set spriteSet, Textures::WallSpecific& tile, sf::Vector2f position, const TextureHolder& textures);
 
   // Draws
