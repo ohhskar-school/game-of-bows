@@ -8,9 +8,7 @@ Wall::Wall(Set spriteSet, Textures::WallSpecific& tile, sf::Vector2f position, c
 }
 
 // Draws
-void Wall::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const {
-  target.draw(_sprite, states);
-}
+void Wall::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(_sprite, states); }
 
 // Getters
 unsigned int Wall::getCategory() const { return Category::Wall | Category::Collidable; }
@@ -19,10 +17,16 @@ sf::FloatRect Wall::getBoundRect() const { return getWorldTransform().transformR
 // Texture Maps
 Textures::ID Wall::getSpriteSheet(Wall::Set set) {
   switch (set) {
-    case Wall::Set::Standard:
-      return Textures::ID::WallStandard;
+    case Wall::Set::Purple:
+      return Textures::ID::PurpleWall;
+    case Wall::Set::Green:
+      return Textures::ID::GreenWall;
+    case Wall::Set::Red:
+      return Textures::ID::RedWall;
+    case Wall::Set::Orange:
+      return Textures::ID::OrangeWall;
     default:
-      return Textures::ID::WallStandard;
+      return Textures::ID::PurpleWall;
   }
 }
 

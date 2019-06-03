@@ -6,55 +6,98 @@ CreditsState::CreditsState(StateStack& stack, Context context)
   _BackgroundSprite.setTexture(context.textures->get(Textures::MenuScreen));
   sf::Font& font = context.fonts->get(Fonts::Main);
 
-  sf::Text developed;
-  developed.setFont(font);
-  developed.setString("Developed by");
-  developed.setColor(sf::Color::Yellow);
-  centerOrigin(developed);
-  developed.setCharacterSize(24);
-  developed.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, -130.f));
-  _Text.push_back(developed);
+  sf::Text titleOne;
+  titleOne.setFont(font);
+  titleOne.setString("Art:");
+  titleOne.setFillColor(sf::Color::Yellow);
+  titleOne.setCharacterSize(24);
+  titleOne.setPosition(sf::Vector2f(50.f, 50.f));
+  _Text.push_back(titleOne);
 
-  sf::Text nameOne;
-  nameOne.setFont(context.fonts->get(Fonts::Main));
-  nameOne.setString("Oscar Vian L. Valles");
-  centerOrigin(nameOne);
-  nameOne.setCharacterSize(16);
-  nameOne.setPosition(developed.getPosition() + sf::Vector2f(25.f, 30.f));
-  _Text.push_back(nameOne);
+  sf::Text creditOne;
+  creditOne.setFont(context.fonts->get(Fonts::Main));
+  creditOne.setString("Adventurer Animation Pack by FinalGateStudios");
+  creditOne.setCharacterSize(13);
+  creditOne.setPosition(titleOne.getPosition() + sf::Vector2f(0.f, 50.f));
+  _Text.push_back(creditOne);
 
-  sf::Text nameTwo;
-  nameTwo.setFont(context.fonts->get(Fonts::Main));
-  nameTwo.setString("Justin Andre E. Po");
-  centerOrigin(nameTwo);
-  nameTwo.setCharacterSize(16);
-  nameTwo.setPosition(nameOne.getPosition() + sf::Vector2f(25.f, 30.f));
-  _Text.push_back(nameTwo);
+  sf::Text creditTwo;
+  creditTwo.setFont(context.fonts->get(Fonts::Main));
+  creditTwo.setString("Generic DUNGEON pack by Estudio Vaca Roxa");
+  creditTwo.setCharacterSize(13);
+  creditTwo.setPosition(creditOne.getPosition() + sf::Vector2f(0.f, 30.f));
+  _Text.push_back(creditTwo);
 
-  sf::Text nameThree;
-  nameThree.setFont(context.fonts->get(Fonts::Main));
-  nameThree.setString("Patricia Lexa U. Tumulak");
-  centerOrigin(nameThree);
-  nameThree.setCharacterSize(16);
-  nameThree.setPosition(nameTwo.getPosition() + sf::Vector2f(25.f, 30.f));
-  _Text.push_back(nameThree);
+  sf::Text creditThree;
+  creditThree.setFont(context.fonts->get(Fonts::Main));
+  creditThree.setString("Green Pixel Art Background by Fez Escalante");
+  creditThree.setCharacterSize(13);
+  creditThree.setPosition(creditTwo.getPosition() + sf::Vector2f(0.f, 30.f));
+  _Text.push_back(creditThree);
 
-sf::Text produced;
-  produced.setFont(context.fonts->get(Fonts::Main));
-  produced.setString("Produced By");
-  produced.setColor(sf::Color::Yellow);
-  centerOrigin(produced);
-  produced.setCharacterSize(24);
-  produced.setPosition(nameThree.getPosition() + sf::Vector2f(25.f, 30.f));
-  _Text.push_back(produced);
+  sf::Text creditFour;
+  creditFour.setFont(context.fonts->get(Fonts::Main));
+  creditFour.setString("Lava Cave from Dinocide");
+  creditFour.setCharacterSize(13);
+  creditFour.setPosition(creditThree.getPosition() + sf::Vector2f(0.f, 30.f));
+  _Text.push_back(creditFour);
 
-  sf::Text nameFour;
-  nameFour.setFont(context.fonts->get(Fonts::Main));
-  nameFour.setString("Ryan Ciriaco M. Dulaca");
-  centerOrigin(nameFour);
-  nameFour.setCharacterSize(16);
-  nameFour.setPosition(produced.getPosition() + sf::Vector2f(25.f, 30.f));
-  _Text.push_back(nameFour);
+  sf::Text creditFive;
+  creditFive.setFont(context.fonts->get(Fonts::Main));
+  creditFive.setString("Desert Background by blank_canvas");
+  creditFive.setCharacterSize(13);
+  creditFive.setPosition(creditFour.getPosition() + sf::Vector2f(0.f, 30.f));
+  _Text.push_back(creditFive);
+
+  sf::Text titleTwo;
+  titleTwo.setFont(font);
+  titleTwo.setString("Music:");
+  titleTwo.setFillColor(sf::Color::Yellow);
+  titleTwo.setCharacterSize(24);
+  titleTwo.setPosition(creditFive.getPosition() + sf::Vector2f(0.f, 70.f));
+  _Text.push_back(titleTwo);
+
+  sf::Text creditSix;
+  creditSix.setFont(font);
+  creditSix.setString("SFX - Towerfall Ascension");
+  creditSix.setCharacterSize(13);
+  creditSix.setPosition(titleTwo.getPosition() + sf::Vector2f(0.f, 50.f));
+  _Text.push_back(creditSix);
+
+  sf::Text creditSeven;
+  creditSeven.setFont(font);
+  creditSeven.setString("Reincarnated Soul Part 2 - Castlevania: Bloodlines");
+  creditSeven.setCharacterSize(13);
+  creditSeven.setPosition(creditSix.getPosition() + sf::Vector2f(0.f, 30.f));
+  _Text.push_back(creditSeven);
+
+  sf::Text creditEight;
+  creditEight.setFont(font);
+  creditEight.setString("Sky Tower - Kirby’s Return to Dream Land");
+  creditEight.setCharacterSize(13);
+  creditEight.setPosition(creditSeven.getPosition() + sf::Vector2f(0.f, 30.f));
+  _Text.push_back(creditEight);
+
+  sf::Text creditNine;
+  creditNine.setFont(font);
+  creditNine.setString("The Raising Fighting Spirit - Naruto");
+  creditNine.setCharacterSize(13);
+  creditNine.setPosition(creditEight.getPosition() + sf::Vector2f(0.f, 30.f));
+  _Text.push_back(creditNine);
+
+  sf::Text creditTen;
+  creditTen.setFont(font);
+  creditTen.setString("Song of the Ancients - NieR: Automata");
+  creditTen.setCharacterSize(13);
+  creditTen.setPosition(creditNine.getPosition() + sf::Vector2f(0.f, 30.f));
+  _Text.push_back(creditTen);
+
+  sf::Text creditEleven;
+  creditEleven.setFont(font);
+  creditEleven.setString("Dating Fight! - UNDERTALE");
+  creditEleven.setCharacterSize(13);
+  creditEleven.setPosition(creditTen.getPosition() + sf::Vector2f(0.f, 30.f));
+  _Text.push_back(creditEleven);
 }
 
 void CreditsState::draw() {

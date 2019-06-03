@@ -4,16 +4,15 @@
 AboutState::AboutState(StateStack& stack, Context context)
     : State(stack, context), _ShowText(true), _TextEffectTime(sf::Time::Zero) {
   _BackgroundSprite.setTexture(context.textures->get(Textures::MenuScreen));
-  sf::Texture& texture = context.textures->get(Textures::TitleScreen);
   sf::Font& font = context.fonts->get(Fonts::Main);
 
   sf::Text developed;
   developed.setFont(font);
   developed.setString("Developed by");
-  developed.setColor(sf::Color::Yellow);
+  developed.setFillColor(sf::Color::Yellow);
   centerOrigin(developed);
   developed.setCharacterSize(24);
-  developed.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0.f, -130.f));
+  developed.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(35.f, -130.f));
   _Text.push_back(developed);
 
   sf::Text nameOne;
@@ -21,7 +20,7 @@ AboutState::AboutState(StateStack& stack, Context context)
   nameOne.setString("Oscar Vian L. Valles");
   centerOrigin(nameOne);
   nameOne.setCharacterSize(16);
-  nameOne.setPosition(developed.getPosition() + sf::Vector2f(25.f, 30.f));
+  nameOne.setPosition(developed.getPosition() + sf::Vector2f(100.f, 40.f));
   _Text.push_back(nameOne);
 
   sf::Text nameTwo;
@@ -29,7 +28,7 @@ AboutState::AboutState(StateStack& stack, Context context)
   nameTwo.setString("Justin Andre E. Po");
   centerOrigin(nameTwo);
   nameTwo.setCharacterSize(16);
-  nameTwo.setPosition(nameOne.getPosition() + sf::Vector2f(25.f, 30.f));
+  nameTwo.setPosition(nameOne.getPosition() + sf::Vector2f(-15.f, 30.f));
   _Text.push_back(nameTwo);
 
   sf::Text nameThree;
@@ -37,16 +36,16 @@ AboutState::AboutState(StateStack& stack, Context context)
   nameThree.setString("Patricia Lexa U. Tumulak");
   centerOrigin(nameThree);
   nameThree.setCharacterSize(16);
-  nameThree.setPosition(nameTwo.getPosition() + sf::Vector2f(25.f, 30.f));
+  nameThree.setPosition(nameTwo.getPosition() + sf::Vector2f(45.f, 30.f));
   _Text.push_back(nameThree);
 
-sf::Text produced;
+  sf::Text produced;
   produced.setFont(context.fonts->get(Fonts::Main));
   produced.setString("Produced By");
-  produced.setColor(sf::Color::Yellow);
+  produced.setFillColor(sf::Color::Yellow);
   centerOrigin(produced);
   produced.setCharacterSize(24);
-  produced.setPosition(nameThree.getPosition() + sf::Vector2f(25.f, 30.f));
+  produced.setPosition(nameThree.getPosition() + sf::Vector2f(-130.f, 50.f));
   _Text.push_back(produced);
 
   sf::Text nameFour;
@@ -54,7 +53,7 @@ sf::Text produced;
   nameFour.setString("Ryan Ciriaco M. Dulaca");
   centerOrigin(nameFour);
   nameFour.setCharacterSize(16);
-  nameFour.setPosition(produced.getPosition() + sf::Vector2f(25.f, 30.f));
+  nameFour.setPosition(produced.getPosition() + sf::Vector2f(120.f, 40.f));
   _Text.push_back(nameFour);
 }
 

@@ -23,12 +23,17 @@ class MovableEntity : public SceneNode {
   bool getCollidable() const;
 
   // Actions
+  void setJumping(bool update);
+  bool getJumping() const;
+  unsigned int getMoving() const;
   void control(sf::Vector2f change);
   void halt();
 
  private:
   sf::Vector2f _velocity;
   bool _collidable;
+  bool _jumping;
+  unsigned int _moving;
 };
 
 #endif

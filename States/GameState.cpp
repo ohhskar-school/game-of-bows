@@ -8,6 +8,10 @@ void GameState::draw() { _World.draw(); }
 bool GameState::update(sf::Time dt) {
   _World.update(dt);
 
+  // if(_World.hasWon()) {
+  //   requestStackPush(States::Continue);
+  // }
+
   CommandQueue& commands = _World.getCommandQueue();
   _Player.handleRealtimeInput(commands);
 

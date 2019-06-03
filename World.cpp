@@ -1,6 +1,10 @@
 #include "World.hpp"
 #include <iostream>
+#include "Maps/MapFour.hpp"
 #include "Maps/MapOne.hpp"
+// #include "Maps/MapThree.hpp"
+// #include "Maps/MapTwo.hpp"
+
 World::World(sf::RenderWindow& window)
     : _window(window),
       _worldView(window.getDefaultView()),
@@ -12,7 +16,22 @@ World::World(sf::RenderWindow& window)
       _textures(),
       _player(nullptr),
       _commandQueue() {
-  _mapArray = mapOne;
+  srand((unsigned)time(0));
+  _randValue = rand() % 4;
+  switch (_randValue) {
+    case 0:
+    case 1:
+      _mapArray = mapOne;
+      break;
+    case 2:
+      _mapArray = mapFour;
+      break;
+    case 3:
+    default:
+      _mapArray = mapFour;
+      break;
+  }
+
   loadTextures();
   buildScene();
   _worldView.setCenter(_worldView.getSize().x / 2.f, _worldView.getSize().y / 2.f);
@@ -20,9 +39,33 @@ World::World(sf::RenderWindow& window)
 
 // Initial Setting Up
 void World::loadTextures() {
-  _textures.load(Textures::ID::Player, "Assets/character/player.png");
-  _textures.load(Textures::ID::Background, "Assets/background/standardBG.png");
-  _textures.load(Textures::ID::WallStandard, "Assets/background/standard.png");
+  // Player Animations
+  // Blue
+  _textures.load(Textures::ID::BlueRun, "Assets/character/BlueRun.png");
+  _textures.load(Textures::ID::BlueJump, "Assets/character/BlueJump.png");
+  _textures.load(Textures::ID::BlueIdle, "Assets/character/BlueIdle.png");
+  _textures.load(Textures::ID::BlueDeath, "Assets/character/BlueDeath.png");
+
+  // Pink
+  _textures.load(Textures::ID::PinkRun, "Assets/character/PinkRun.png");
+  _textures.load(Textures::ID::PinkJump, "Assets/character/PinkJump.png");
+  _textures.load(Textures::ID::PinkIdle, "Assets/character/PinkIdle.png");
+  _textures.load(Textures::ID::PinkDeath, "Assets/character/PinkDeath.png");
+
+  // Stage
+  _textures.load(Textures::ID::PurpleWall, "Assets/background/PurpleWall.png");
+  _textures.load(Textures::ID::PurpleBG, "Assets/background/PurpleBG.png");
+
+  _textures.load(Textures::ID::GreenWall, "Assets/background/GreenWall.png");
+  _textures.load(Textures::ID::GreenBG, "Assets/background/GreenBG.png");
+
+  _textures.load(Textures::ID::RedWall, "Assets/background/RedWall.png");
+  _textures.load(Textures::ID::RedBG, "Assets/background/RedBG.png");
+
+  _textures.load(Textures::ID::OrangeWall, "Assets/background/OrangeWall.png");
+  _textures.load(Textures::ID::OrangeBG, "Assets/background/OrangeBG.png");
+
+  // Arrow
   _textures.load(Textures::ID::Arrow, "Assets/arrow/arrow.png");
 }
 
@@ -34,8 +77,31 @@ void World::buildScene() {
     _sceneGraph.attachChild(std::move(layer));
   }
 
+  Textures::ID bgTexure = Textures::PurpleBG;
+  Wall::Set wallSet = Wall::Set::Purple;
+
+  switch (_randValue) {
+    case 0:
+      bgTexure = Textures::PurpleBG;
+      wallSet = Wall::Set::Purple;
+      break;
+    case 1:
+      bgTexure = Textures::GreenBG;
+      wallSet = Wall::Set::Green;
+      break;
+    case 2:
+      bgTexure = Textures::RedBG;
+      wallSet = Wall::Set::Red;
+      break;
+    case 3:
+    default:
+      bgTexure = Textures::OrangeBG;
+      wallSet = Wall::Set::Orange;
+      break;
+  }
+
   // Setting Background
-  sf::Texture& texture = _textures.get(Textures::Background);
+  sf::Texture& texture = _textures.get(bgTexure);
   sf::IntRect textureRect(_worldBounds);
   std::unique_ptr<SpriteEntity> backgroundSprite(new SpriteEntity(texture, textureRect));
   backgroundSprite->setPosition(_worldBounds.left, _worldBounds.top);
@@ -52,7 +118,7 @@ void World::buildScene() {
     j = 0;
     for (auto& elt : row) {
       if (elt != Textures::WallSpecific::None) {
-        std::unique_ptr<Wall> wall(new Wall(Wall::Set::Standard, elt, sf::Vector2f(j * 32.f, i * 32.f), _textures));
+        std::unique_ptr<Wall> wall(new Wall(wallSet, elt, sf::Vector2f(j * 32.f, i * 32.f), _textures));
         wallParent->attachChild(std::move(wall));
       }
       j++;
@@ -113,7 +179,6 @@ void World::handleCollisions() {
   std::set<SceneNode::CollisionPair> collisionPairs;
   _sceneGraph.checkSceneCollision(_sceneGraph, collisionPairs);
   for (auto pair : collisionPairs) {
-    std::cout << "collisions" << std::endl;
     // Player Collisions
     if (matchesCategories(pair, Category::Player, Category::Wall)) {
       auto& player = static_cast<Character&>(*pair.first);
@@ -128,7 +193,7 @@ void World::handleCollisions() {
       player.handleArrowCollision(!arrow.getCollidable());
     }
 
-    //Arrow Collisions
+    // Arrow Collisions
     if (matchesCategories(pair, Category::Arrow, Category::Wall)) {
       auto& arrow = static_cast<Projectile&>(*pair.first);
       auto& wall = static_cast<Wall&>(*pair.second);

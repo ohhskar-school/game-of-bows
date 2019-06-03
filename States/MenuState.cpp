@@ -75,10 +75,13 @@ bool MenuState::handleEvent(const sf::Event& event) {
       requestStackPop();
       requestStackPush(States::Game);
     } else if (_OptionIndex == Controls) {
+      requestStackPop();
       requestStackPush(States::Controls);
     } else if (_OptionIndex == About) {
+      requestStackPop();
       requestStackPush(States::About);
     }  else if (_OptionIndex == Credits) {
+      requestStackPop();
       requestStackPush(States::Credits);
     } else if (_OptionIndex == Exit) {
       // The exit option was chosen, by removing itself, the stack will be empty, and the game will know it is time to
@@ -114,8 +117,8 @@ void MenuState::updateOptionText() {
   if (_Options.empty()) return;
 
   // White all texts
-  for (sf::Text& text : _Options) text.setColor(sf::Color::White);
+  for (sf::Text& text : _Options) text.setFillColor(sf::Color::White);
 
   // Red the selected text
-  _Options[_OptionIndex].setColor(sf::Color::Yellow);
+  _Options[_OptionIndex].setFillColor(sf::Color::Yellow);
 }

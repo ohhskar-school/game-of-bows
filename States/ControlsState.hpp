@@ -15,12 +15,11 @@ class ControlsState : public State {
   virtual bool handleEvent(const sf::Event& event);
 
   void updateOptionText();
-  void updateOptionBackground();
 
  private:
   enum OptionNames {
-    Controller,
     Keyboard,
+    Controller,
     Back
   };
 

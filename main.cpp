@@ -9,7 +9,6 @@
 //     GameState game();
 //     game.run();
 //   } catch (std::exception& e){
-//     std::cout << "\nException: " << e.what() << std::endl;
 //   }
 // }
 

@@ -19,12 +19,19 @@ class CreditsState : public State {
   virtual bool handleEvent(const sf::Event& event);
 
   enum AboutText {
-    developed,
-    nameOne,
-    nameTwo,
-    nameThree,
-    produced,
-    nameFour
+    titleOne,
+    creditOne,
+    creditTwo,
+    creditThree,
+    creditFour,
+    creditFive,
+    titleTwo,
+    creditSix,
+    creditSeven,
+    creditEight,
+    creditNine,
+    creditTen,
+    creditEleven,
   };
 
  private:

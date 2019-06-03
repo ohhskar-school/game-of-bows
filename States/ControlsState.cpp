@@ -7,8 +7,8 @@
 
 ControlsState::ControlsState(StateStack& stack, Context context)
     : State(stack, context),
-      _KeyboardTexture(context.textures->get(Textures::Keyboard)),
       _ControllerTexture(context.textures->get(Textures::Controller)),
+      _KeyboardTexture(context.textures->get(Textures::Keyboard)),
       _Options(),
       _OptionIndex(0) {
   sf::Font& font = context.fonts->get(Fonts::Main);
@@ -21,7 +21,7 @@ ControlsState::ControlsState(StateStack& stack, Context context)
   keyboardOption.setString("Keyboard");
   centerOrigin(keyboardOption);
   keyboardOption.setCharacterSize(16);
-  keyboardOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(25.f, 130.f));
+  keyboardOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(-40.f, 160.f));
   _Options.push_back(keyboardOption);
 
   sf::Text controllerOption;
@@ -29,7 +29,7 @@ ControlsState::ControlsState(StateStack& stack, Context context)
   controllerOption.setString("Controller");
   centerOrigin(controllerOption);
   controllerOption.setCharacterSize(16);
-  controllerOption.setPosition(keyboardOption.getPosition() + sf::Vector2f(25.f, 30.f));
+  controllerOption.setPosition(keyboardOption.getPosition() + sf::Vector2f(200.f, 0.f));
   _Options.push_back(controllerOption);
 
   sf::Text backOption;
@@ -37,7 +37,7 @@ ControlsState::ControlsState(StateStack& stack, Context context)
   backOption.setString("Back");
   centerOrigin(backOption);
   backOption.setCharacterSize(16);
-  backOption.setPosition(controllerOption.getPosition() + sf::Vector2f(25.f, 30.f));
+  backOption.setPosition(controllerOption.getPosition() + sf::Vector2f(200.f, 0.f));
   _Options.push_back(backOption);
 
   updateOptionText();
@@ -58,15 +58,9 @@ bool ControlsState::handleEvent(const sf::Event& event) {
   // The demonstration menu logic
   if (event.type != sf::Event::KeyPressed) return false;
 
-  if (event.key.code == sf::Keyboard::Return) {
-    // if (_OptionIndex == Keyboard) {
-    //   _BackgroundSprite.setTexture(_KeyboardTexture);
-    // } else if (_OptionIndex == Controller) {
-    //   _BackgroundSprite.setTexture(_ControllerTexture);
-    // } 
-    if (_OptionIndex == Back) {
+  if (event.key.code == sf::Keyboard::Return && _OptionIndex == Back) {
+      requestStackPop();
       requestStackPush(States::Menu);
-    }
   }
 
   else if (event.key.code == sf::Keyboard::Left) {
@@ -77,7 +71,6 @@ bool ControlsState::handleEvent(const sf::Event& event) {
       _OptionIndex = _Options.size() - 1;
 
     updateOptionText();
-    updateOptionBackground();
   }
 
   else if (event.key.code == sf::Keyboard::Right) {
@@ -88,7 +81,6 @@ bool ControlsState::handleEvent(const sf::Event& event) {
       _OptionIndex = 0;
 
     updateOptionText();
-    updateOptionBackground();
   }
 
   return true;
@@ -98,13 +90,11 @@ void ControlsState::updateOptionText() {
   if (_Options.empty()) return;
 
   // White all texts
-  for (sf::Text& text : _Options) text.setColor(sf::Color::White);
+  for (sf::Text& text : _Options) text.setFillColor(sf::Color::White);
 
   // Red the selected text
-  _Options[_OptionIndex].setColor(sf::Color::Yellow);
-}
+  _Options[_OptionIndex].setFillColor(sf::Color::Yellow);
 
-void ControlsState::updateOptionBackground() {
   if(_OptionIndex == Keyboard) {
       _BackgroundSprite.setTexture(_KeyboardTexture);
   } else if(_OptionIndex == Controller) {

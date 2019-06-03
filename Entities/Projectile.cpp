@@ -3,7 +3,6 @@
 Projectile::Projectile(const TextureHolder& textures, float rotation, sf::Vector2f position)
     : _sprite(textures.get(Textures::ID::Arrow)), _targetDirection(position), _rotation(rotation), _grabbed(false) {
   sf::Vector2f velocity;
-
   switch (static_cast<int>(rotation)) {
     case 0:
     case 45:
@@ -11,10 +10,11 @@ Projectile::Projectile(const TextureHolder& textures, float rotation, sf::Vector
       velocity.x = 300.f;
       break;
     case 90:
-    case 180:
+    case -90:
       velocity.x = 0.f;
       break;
     case 135:
+    case 180:
     case 225:
       velocity.x = -300.f;
       break;
@@ -49,7 +49,7 @@ void Projectile::updateCurrent(sf::Time dt, CommandQueue& commands) {
 }
 void Projectile::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(_sprite, states); }
 
-// COllision Handling
+// Collision Handling
 
 void Projectile::handleWallCollision(sf::FloatRect wallBounds) {
   setVelocity(sf::Vector2f(0.f, 0.f));
@@ -83,7 +83,6 @@ void Projectile::handleWallCollision(sf::FloatRect wallBounds) {
 
 void Projectile::handlePlayerCollision() {
   if (!getCollidable()) {
-    std::cout << "for deletion" << std::endl;
     _grabbed = true;
   }
 }

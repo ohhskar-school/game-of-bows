@@ -10,6 +10,7 @@ enum ID {
   About,
   Credits,
   Game,
+  Continue,
 };
 }
 
