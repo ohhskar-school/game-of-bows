@@ -6,6 +6,9 @@ enum ID {
   None,
   Title,
   Menu,
+  Controls,
+  About,
+  Credits,
   Game,
 };
 }

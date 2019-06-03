@@ -8,7 +8,7 @@
 
 // Resource Tables
 namespace Textures {
-enum ID { Player, Background, WallStandard, Arrow, TitleScreen };
+enum ID { Player, Background, WallStandard, Arrow, TitleScreen, MenuScreen, Controller, Keyboard };
 enum WallSpecific {
   None,
   Air,
@@ -36,10 +36,8 @@ enum WallSpecific {
 }  // namespace Textures
 
 namespace Fonts {
-enum ID {
-  Main
-};
-}; // namespace Font
+enum ID { Main };
+};  // namespace Fonts
 
 template <typename Resource, typename Identifier>
 class ResourceHolder {

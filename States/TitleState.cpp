@@ -10,7 +10,6 @@ TitleState::TitleState(StateStack& stack, Context context)
   centerOrigin(_Text);
   _Text.setCharacterSize(16);
   _Text.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(150.f, 130.f));
-//   _Text.setPosition(0.f, 0.f);
 }
 
 void TitleState::draw() {

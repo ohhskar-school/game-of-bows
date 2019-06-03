@@ -4,6 +4,9 @@
 #include "States/State.hpp"
 #include "States/StateIdentifiers.hpp"
 #include "States/TitleState.hpp"
+#include "States/ControlsState.hpp"
+#include "States/AboutState.hpp"
+#include "States/CreditsState.hpp"
 #include "Utilities/Utilities.hpp"
 
 const sf::Time Application::TimePerFrame = sf::seconds(1.f / 60.f);
@@ -21,6 +24,9 @@ Application::Application()
 
   _Fonts.load(Fonts::Main, "Assets/fonts/prstartk.ttf");
   _Textures.load(Textures::TitleScreen, "Assets/background/titleBG.png");
+  _Textures.load(Textures::MenuScreen, "Assets/background/menuBG.png");
+  _Textures.load(Textures::Controller, "Assets/background/controllerBG.png");
+  _Textures.load(Textures::Keyboard, "Assets/background/keyboardBG.png");
 
   _StatisticsText.setFont(_Fonts.get(Fonts::Main));
   _StatisticsText.setPosition(5.f, 5.f);
@@ -78,8 +84,6 @@ void Application::updateStatistics(sf::Time dt) {
   _StatisticsUpdateTime += dt;
   _StatisticsNumFrames += 1;
   if (_StatisticsUpdateTime >= sf::seconds(1.0f)) {
-    // _StatisticsText.setString("FPS: " + toString(_StatisticsNumFrames));
-
     _StatisticsUpdateTime -= sf::seconds(1.0f);
     _StatisticsNumFrames = 0;
   }
@@ -88,5 +92,8 @@ void Application::updateStatistics(sf::Time dt) {
 void Application::registerStates() {
   _StateStack.registerState<TitleState>(States::Title);
   _StateStack.registerState<MenuState>(States::Menu);
+  _StateStack.registerState<ControlsState>(States::Controls);
+  _StateStack.registerState<AboutState>(States::About);
+  _StateStack.registerState<CreditsState>(States::Credits);
   _StateStack.registerState<GameState>(States::Game);
 }

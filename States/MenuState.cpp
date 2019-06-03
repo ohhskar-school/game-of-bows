@@ -17,15 +17,23 @@ MenuState::MenuState(StateStack& stack, Context context) : State(stack, context)
   playOption.setString("Play");
   centerOrigin(playOption);
   playOption.setCharacterSize(16);
-  playOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(25.f, 130.f));
+  playOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(25.f, 100.f));
   _Options.push_back(playOption);
+
+  sf::Text controlsOption;
+  controlsOption.setFont(font);
+  controlsOption.setString("Controls");
+  centerOrigin(controlsOption);
+  controlsOption.setCharacterSize(16);
+  controlsOption.setPosition(playOption.getPosition() + sf::Vector2f(25.f, 30.f));
+  _Options.push_back(controlsOption);
 
   sf::Text aboutOption;
   aboutOption.setFont(font);
   aboutOption.setString("About");
   centerOrigin(aboutOption);
   aboutOption.setCharacterSize(16);
-  aboutOption.setPosition(playOption.getPosition() + sf::Vector2f(0.f, 30.f));
+  aboutOption.setPosition(controlsOption.getPosition() + sf::Vector2f(-20.f, 30.f));
   _Options.push_back(aboutOption);
 
   sf::Text creditsOption;
@@ -33,7 +41,7 @@ MenuState::MenuState(StateStack& stack, Context context) : State(stack, context)
   creditsOption.setString("Credits");
   centerOrigin(creditsOption);
   creditsOption.setCharacterSize(16);
-  creditsOption.setPosition(aboutOption.getPosition() + sf::Vector2f(0.f, 30.f));
+  creditsOption.setPosition(aboutOption.getPosition() + sf::Vector2f(12.f, 30.f));
   _Options.push_back(creditsOption);
 
   sf::Text exitOption;
@@ -41,7 +49,7 @@ MenuState::MenuState(StateStack& stack, Context context) : State(stack, context)
   exitOption.setString("Exit");
   centerOrigin(exitOption);
   exitOption.setCharacterSize(16);
-  exitOption.setPosition(creditsOption.getPosition() + sf::Vector2f(0.f, 30.f));
+  exitOption.setPosition(creditsOption.getPosition() + sf::Vector2f(-19.f, 30.f));
   _Options.push_back(exitOption);
 
   updateOptionText();
@@ -66,12 +74,12 @@ bool MenuState::handleEvent(const sf::Event& event) {
     if (_OptionIndex == Play) {
       requestStackPop();
       requestStackPush(States::Game);
+    } else if (_OptionIndex == Controls) {
+      requestStackPush(States::Controls);
     } else if (_OptionIndex == About) {
-      requestStackPop();
-      requestStackPush(States::Game);
+      requestStackPush(States::About);
     }  else if (_OptionIndex == Credits) {
-      requestStackPop();
-      requestStackPush(States::Game);
+      requestStackPush(States::Credits);
     } else if (_OptionIndex == Exit) {
       // The exit option was chosen, by removing itself, the stack will be empty, and the game will know it is time to
       // close.
