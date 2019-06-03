@@ -14,7 +14,7 @@ class MovableEntity : public SceneNode {
   sf::Vector2f getVelocity() const;
 
   // Updates
-  void updateCurrent(sf::Time dt);
+  void updateCurrent(sf::Time dt, CommandQueue& commands);
 
   // For Collision
   unsigned int getCategory() const;

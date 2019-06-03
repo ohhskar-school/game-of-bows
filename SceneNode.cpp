@@ -24,16 +24,16 @@ SceneNode::NodePtr SceneNode::detachChild(const SceneNode& node) {
 
 // Update Functions
 
-void SceneNode::update(sf::Time dt) {
-  updateCurrent(dt);
-  updateChildren(dt);
+void SceneNode::update(sf::Time dt, CommandQueue& commands) {
+  updateCurrent(dt, commands);
+  updateChildren(dt, commands);
 }
 
-void SceneNode::updateCurrent(sf::Time dt) {}
+void SceneNode::updateCurrent(sf::Time dt, CommandQueue& commands) {}
 
-void SceneNode::updateChildren(sf::Time dt) {
+void SceneNode::updateChildren(sf::Time dt, CommandQueue& commands) {
   for (const NodePtr& child : _child) {
-    child->update(dt);
+    child->update(dt, commands);
   }
 }
 
@@ -104,9 +104,20 @@ bool collision(const SceneNode& lhs, const SceneNode& rhs) { return lhs.getBound
 void SceneNode::checkNodeCollision(SceneNode& node, unsigned int cell, unsigned int category,
                                    std::set<CollisionPair>& collisionPairs) {
   unsigned int thisCategory = this->getCategory();
-  if ((thisCategory & Category::Collidable) == Category::Collidable &&
+  if (
+      // Checks if both nodes are collidable
+      (thisCategory & Category::Collidable) == Category::Collidable &&
+
+      // Checks if one of the node is a wall and the main node ignores wall collisions
       !(((thisCategory & Category::Wall) == Category::Wall) &&
-        (category & Category::IgnoreWallCollide) == Category::IgnoreWallCollide)) {
+        (category & Category::IgnoreWallCollide) == Category::IgnoreWallCollide) &&
+
+      // Checks if both nodes are arrows and if both nodes ignore wall collisions. If they ignore wall collisions, then
+      // that means they are attached to a wall, they don't nteed to check if they collide with each other
+      !(((thisCategory & (Category::Arrow | Category::IgnoreWallCollide)) ==
+         (Category::Arrow | Category::IgnoreWallCollide)) &&
+        (category & (Category::Arrow | Category::IgnoreWallCollide)) ==
+            (Category::Arrow | Category::IgnoreWallCollide))) {
     // Since both objects are collidables,check if they collide and insert into the collision pair set
     if (this != &node && collision(*this, node)) {
       collisionPairs.insert(std::minmax(this, &node));
@@ -128,10 +139,10 @@ void SceneNode::checkSceneCollision(SceneNode& sceneGraph, std::set<CollisionPai
   // is then there is no need to check for collisions as by definition nothing should collide with it
 
   bool checkNode = (sceneCategory & Category::Scene) == Category::Scene ? false : true;
+
   // Only runs the collision check on the current node and its child nodes if it is collidable. Does not run a collision
   // check if the current node is a wall as the other entities will check if they collide with the wall, lessening the
   // amount of collisions to be checked
-
   if ((sceneCategory & Category::Collidable) == Category::Collidable &&
       (sceneCategory & Category::Wall) != Category::Wall) {
     if (checkNode) {
@@ -142,4 +153,13 @@ void SceneNode::checkSceneCollision(SceneNode& sceneGraph, std::set<CollisionPai
       checkSceneCollision(*child, collisionPairs);
     }
   }
+}
+
+// Deletion Functions
+bool SceneNode::isDestroyed() const { return false; }
+
+void SceneNode::removeArrows() {
+  auto wreckfieldBegin = std::remove_if(_child.begin(), _child.end(), std::mem_fn(&SceneNode::isDestroyed));
+  _child.erase(wreckfieldBegin, _child.end());
+  std::for_each(_child.begin(), _child.end(), std::mem_fn(&SceneNode::removeArrows));
 }

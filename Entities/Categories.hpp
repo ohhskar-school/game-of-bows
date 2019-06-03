@@ -12,6 +12,8 @@ enum Type {
   VisualArrow = 1 << 5,
   Wall = 1 << 6,
   IgnoreWallCollide = 1 << 7,
+  ArrowHolder = 1 << 8,
+  Player = PlayerOne | PlayerTwo,
 };
 }  // namespace Category
 

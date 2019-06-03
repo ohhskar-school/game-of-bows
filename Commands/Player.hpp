@@ -14,7 +14,7 @@ class CommandQueue;
 // Player Class
 class Player {
  public:
-  enum Action { MoveLeft, MoveRight, Jump, ActionCount };
+  enum Action { MoveLeft, MoveRight, Jump, Fire, ActionCount };
 
   Player();
   void handleEvent(const sf::Event& event, CommandQueue& commands);
