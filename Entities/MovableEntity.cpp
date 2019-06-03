@@ -1,7 +1,7 @@
 #include "MovableEntity.hpp"
 #include <iostream>
 
-MovableEntity::MovableEntity() : _collidable(true) {}
+MovableEntity::MovableEntity() : _collidable(true), _jumping(false), _moving(0) {}
 // Setters and Getters
 void MovableEntity::setVelocity(sf::Vector2f velocity) { _velocity = velocity; }
 
@@ -40,18 +40,26 @@ void MovableEntity::setCollidable(bool update) { _collidable = update; }
 
 bool MovableEntity::getCollidable() const { return _collidable; }
 
-// Actions
+void MovableEntity::setJumping(bool update) { _jumping = update; }
 
+bool MovableEntity::getJumping() const { return _jumping; }
+
+unsigned int MovableEntity::getMoving() const { return _moving; }
+
+// Actions
 void MovableEntity::control(sf::Vector2f change) {
   _velocity += change;
   if (_velocity.x > 240.f) {
     _velocity.x = 240.f;
+    _moving = 2;
   }
   if (_velocity.x < -240.f) {
     _velocity.x = -240.f;
+    _moving = 1;
   }
   if (_velocity.y <= -300.f) {
     _velocity.y = -300.f;
+    _jumping = true;
   }
   _collidable = true;
 }
@@ -59,4 +67,5 @@ void MovableEntity::control(sf::Vector2f change) {
 void MovableEntity::halt() {
   _velocity.x = 0.f;
   _collidable = true;
+  _moving = 0;
 }

@@ -5,8 +5,12 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
       fireArrow(),
       _playerNumber(playerNumber),
       _archetype(arch),
-      _sprite(textures.get(toTextureId(arch))),
-      _hitbox(sf::Vector2f(32.f, 48.f)),
+      _sprite(textures.get(toTextureId(arch)), sf::IntRect(0, 0, 32, 32)),
+      _hitbox(sf::Vector2f(40.f, 32.f)),
+      _idle(textures.get(toTextureIdAnim(Character::_animationState::Idle))),
+      _run(textures.get(toTextureIdAnim(Character::_animationState::Run))),
+      _jump(textures.get(toTextureIdAnim(Character::_animationState::Jump))),
+      _death(textures.get(toTextureIdAnim(Character::_animationState::Death))),
       _arrowRotation(0.f),
       _arrowPosition(sf::Vector2f(0.f, 0.f)),
       _arrowQuantity(4),
@@ -14,19 +18,55 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
       _firing(false),
       _countdown(sf::Time::Zero),
       _dead(false) {
+  // Creating Actions
   setArrowAim.category = Category::VisualArrow;
   fireArrow.category = Category::ArrowHolder;
   fireArrow.action = [this, &textures](SceneNode& node, sf::Time) { createProjectile(node, textures); };
+
+  // Creating Animations
+  _idle.setFrameSize(sf::Vector2i(48, 32));
+  _idle.setNumFrames(8);
+  _idle.setDuration(sf::seconds(1));
+  _idle.setRepeating(true);
+
+  _run.setFrameSize(sf::Vector2i(48, 32));
+  _run.setNumFrames(8);
+  _run.setDuration(sf::seconds(0.5));
+  _run.setRepeating(true);
+
+  _jump.setFrameSize(sf::Vector2i(48, 32));
+  _jump.setNumFrames(6);
+  _jump.setDuration(sf::seconds(0.5));
+  _jump.setRepeating(true);
+
+  _death.setFrameSize(sf::Vector2i(48, 32));
+  _death.setNumFrames(11);
+  _death.setDuration(sf::seconds(1.5));
 }
 
 // Draws and Updates
 
 void Character::updateCurrent(sf::Time dt, CommandQueue& commands) {
+  if (getJumping()) {
+    _jump.update(dt);
+  } else if (getMoving() != 0) {
+    _run.update(dt);
+  } else {
+    _idle.update(dt);
+  }
   checkProjectileLaunch(dt, commands);
   MovableEntity::updateCurrent(dt, commands);
 }
 
-void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(_sprite, states); }
+void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const {
+  if (getJumping()) {
+    target.draw(_jump, states);
+  } else if (getMoving() != 0) {
+    target.draw(_run, states);
+  } else {
+    target.draw(_idle, states);
+  }
+}
 
 unsigned int Character::getCategory() const {
   unsigned int collidable =
@@ -50,6 +90,38 @@ Textures::ID Character::toTextureId(Character::Arch arch) {
       return Textures::BlueIdle;
     default:
       return Textures::BlueIdle;
+  }
+}
+
+Textures::ID Character::toTextureIdAnim(Character::_animationState state) {
+  switch (_playerNumber) {
+    case 1:
+      switch (state) {
+        case Idle:
+          return Textures::ID::BlueIdle;
+        case Run:
+          return Textures::ID::BlueRun;
+        case Jump:
+          return Textures::ID::BlueJump;
+        case Death:
+          return Textures::ID::BlueDeath;
+        default:
+          return Textures::ID::BlueIdle;
+      }
+    case 2:
+    default:
+      switch (state) {
+        case Idle:
+          return Textures::ID::PinkIdle;
+        case Run:
+          return Textures::ID::PinkRun;
+        case Jump:
+          return Textures::ID::PinkJump;
+        case Death:
+          return Textures::ID::PinkDeath;
+        default:
+          return Textures::ID::PinkIdle;
+      }
   }
 }
 
@@ -88,8 +160,8 @@ void Character::handleWallCollision(sf::FloatRect wallBounds) {
   // https://stackoverflow.com/questions/5062833/detecting-the-direction-of-a-collision
 }
 
-void Character::handleArrowCollision(bool grabbable){
-  if(grabbable){
+void Character::handleArrowCollision(bool grabbable) {
+  if (grabbable) {
     _arrowQuantity++;
     std::cout << _arrowQuantity << std::endl;
   } else {

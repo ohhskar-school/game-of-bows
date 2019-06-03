@@ -4,9 +4,11 @@
 // User Created
 #include "../Commands/CommandQueue.hpp"
 #include "../ResourceManager.hpp"
+#include "../Animation.hpp"
 #include "MovableEntity.hpp"
 #include "Projectile.hpp"
 #include "VisualArrow.hpp"
+
 
 class Character : public MovableEntity {
  public:
@@ -38,10 +40,20 @@ class Character : public MovableEntity {
 
  private:
   // Variable Declarations
+  enum _animationState{
+    Idle,
+    Run,
+    Jump,
+    Death,
+  };
   unsigned int _playerNumber;
   Arch _archetype;
   sf::Sprite _sprite;
   sf::RectangleShape _hitbox;
+  Animation _idle;
+  Animation _run;
+  Animation _jump;
+  Animation _death;
 
   // Aiming & Arrow Values
   float _arrowRotation;
@@ -54,5 +66,6 @@ class Character : public MovableEntity {
 
   void checkProjectileLaunch(sf::Time dt, CommandQueue& commands);
   Textures::ID toTextureId(Character::Arch);
+  Textures::ID toTextureIdAnim(_animationState state);
 };
 #endif

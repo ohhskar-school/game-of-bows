@@ -1,4 +1,5 @@
 #include "Animation.hpp"
+#include <iostream>
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -82,7 +83,6 @@ void Animation::update(sf::Time dt) {
       _currentFrame++;
     }
   }
-
   _sprite.setTextureRect(textureRect);
 }
 
