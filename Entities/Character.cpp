@@ -18,6 +18,8 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
       _firing(false),
       _countdown(sf::Time::Zero),
       _dead(false) {
+  sf::FloatRect bounds = _hitbox.getLocalBounds();
+
   // Creating Actions
 
   switch (_playerNumber) {
@@ -31,6 +33,7 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
       setArrowAim.category = Category::VisualArrowOne;
       break;
   }
+  setOrigin(std::floor(bounds.left + bounds.width / 2.f), std::floor(bounds.top + bounds.height / 2.f));
   fireArrow.category = Category::ArrowHolder;
   fireArrow.action = [this, &textures](SceneNode& node, sf::Time) { createProjectile(node, textures); };
 
@@ -77,6 +80,8 @@ void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) c
   } else {
     target.draw(_idle, states);
   }
+
+  // target.draw(_hitbox, states);
 }
 
 unsigned int Character::getCategory() const {
@@ -203,41 +208,41 @@ void Character::aim(unsigned int y, unsigned int x, CommandQueue& commands) {
     if (x == 1) {
       if (y == 2) {
         _arrowRotation = 135.f;
-        _arrowPosition.x = 5.f;
-        _arrowPosition.y = 50.f;
-
+        _arrowPosition.x = 6.f;
+        _arrowPosition.y = 47.f;
       } else if (y == 1) {
+        _aiming = true;
         _arrowRotation = 225.f;
-        _arrowPosition.x = -20.f;
-        _arrowPosition.y = 20.f;
+        _arrowPosition.x = -10.f;
+        _arrowPosition.y = 10.f;
       } else {
         _arrowRotation = 180.f;
         _arrowPosition.x = -5.f;
-        _arrowPosition.y = 35.f;
+        _arrowPosition.y = 33.f;
       }
     } else if (x == 2) {
       if (y == 2) {
         _arrowRotation = 45.f;
-        _arrowPosition.x = 50.f;
+        _arrowPosition.x = 55.f;
         _arrowPosition.y = 25.f;
       } else if (y == 1) {
         _arrowRotation = -45.f;
-        _arrowPosition.x = 25.f;
-        _arrowPosition.y = 0.f;
+        _arrowPosition.x = 32.f;
+        _arrowPosition.y = -12.f;
       } else {
-        _arrowPosition.x = 35.f;
-        _arrowPosition.y = 10.f;
+        _arrowPosition.x = 45.f;
+        _arrowPosition.y = 3.f;
       }
     } else if (x == 0) {
       if (y == 2) {
         _arrowRotation = 90.f;
-        _arrowPosition.x = 30.f;
-        _arrowPosition.y = 50.f;
+        _arrowPosition.x = 37.f;
+        _arrowPosition.y = 34.f;
 
       } else if (y == 1) {
         _arrowRotation = -90.f;
-        _arrowPosition.x = 0.f;
-        _arrowPosition.y = -5.f;
+        _arrowPosition.x = 4.f;
+        _arrowPosition.y = -1.f;
       } else {
         _aiming = false;
         _arrowPosition.x = -1000.f;
@@ -266,6 +271,8 @@ void Character::createProjectile(SceneNode& node, const TextureHolder& textures)
 void Character::fire() {
   if (_aiming && _arrowQuantity > 0) {
     _firing = true;
+  } else {
+    _firing = false;
   }
 }
 

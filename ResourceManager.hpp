@@ -9,19 +9,19 @@
 // Resource Tables
 namespace Textures {
 enum ID {
-  //Blue Player Animations
+  // Blue Player Animations
   BlueRun,
   BlueIdle,
   BlueJump,
   BlueDeath,
 
-  //Pink Player Animations
+  // Pink Player Animations
   PinkRun,
   PinkIdle,
   PinkJump,
   PinkDeath,
 
-  //Wall Textures
+  // Wall Textures
   PurpleWall,
   PurpleBG,
 
@@ -33,8 +33,12 @@ enum ID {
 
   OrangeWall,
   OrangeBG,
-  
-  Arrow
+
+  Arrow,
+  TitleScreen,
+  MenuScreen,
+  Controller,
+  Keyboard
 };
 enum WallSpecific {
   None,
@@ -62,6 +66,10 @@ enum WallSpecific {
 };
 }  // namespace Textures
 
+namespace Fonts {
+enum ID { Main };
+};  // namespace Fonts
+
 template <typename Resource, typename Identifier>
 class ResourceHolder {
  public:
@@ -76,5 +84,8 @@ class ResourceHolder {
 // Explicitly create a TextureHolder class for compilation
 template class ResourceHolder<sf::Texture, Textures::ID>;
 typedef ResourceHolder<sf::Texture, Textures::ID> TextureHolder;
+
+template class ResourceHolder<sf::Font, Fonts::ID>;
+typedef ResourceHolder<sf::Font, Fonts::ID> FontHolder;
 
 #endif

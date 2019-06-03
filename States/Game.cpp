@@ -2,7 +2,7 @@
 
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 45.f);
 
-Game::Game() : _window(sf::VideoMode(768, 576), "World", sf::Style::Close), _world(_window) {}
+Game::Game() : _window(sf::VideoMode(768, 576), "World", sf::Style::Close), _world(_window), _fonts(), _textures() {}
 
 void Game::run() {
   sf::Clock clock;

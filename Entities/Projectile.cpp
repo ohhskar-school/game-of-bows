@@ -3,27 +3,46 @@
 Projectile::Projectile(const TextureHolder& textures, float rotation, sf::Vector2f position)
     : _sprite(textures.get(Textures::ID::Arrow)), _targetDirection(position), _rotation(rotation), _grabbed(false) {
   sf::Vector2f velocity;
-
   switch (static_cast<int>(rotation)) {
     case 0:
+      velocity.x = 300.f;
+      velocity.y = 250.f;
+      break;
     case 45:
+      velocity.x = 300.f;
+      velocity.y = 250.f;
+      break;
     case -45:
       velocity.x = 300.f;
+      velocity.y = -250.f;
       break;
     case 90:
-    case 180:
       velocity.x = 0.f;
+      velocity.y = 300.f;
+      break;
+    case -90:
+      velocity.x = 0.f;
+      velocity.y = -300.f;
       break;
     case 135:
+      velocity.x = -300.f;
+      velocity.y = 250.f;
+      break;
+    case 180:
+      velocity.x = -300.f;
+      velocity.y = 250.f;
+      break;
     case 225:
       velocity.x = -300.f;
+      velocity.y = 250.f;
       break;
     default:
       velocity.x = 0.f;
+      velocity.y = 250.f;
       break;
   };
 
-  setVelocity(velocity.x, -250.f);
+  setVelocity(velocity.x, velocity.y);
   setRotation(rotation);
   _initx = velocity.x;
 }
@@ -39,17 +58,21 @@ unsigned int Projectile::getCategory() const {
 void Projectile::updateCurrent(sf::Time dt, CommandQueue& commands) {
   if (getCollidable()) {
     sf::Vector2f velocity = getVelocity();
-    velocity.x += _initx / 5;
+    velocity.x += _initx / 8;
     float angle = _rotation * -velocity.y / 20000;
 
-    setRotation(angle * 180.0 / M_PI);
+    if (_rotation == 45 || _rotation == 135 || _rotation == 90)
+      setRotation((angle * 180.0 / M_PI) * -1);
+    else
+      setRotation(angle * 180.0 / M_PI);
+
     setVelocity(velocity);
     MovableEntity::updateCurrent(dt, commands);
   }
 }
 void Projectile::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(_sprite, states); }
 
-// COllision Handling
+// Collision Handling
 
 void Projectile::handleWallCollision(sf::FloatRect wallBounds) {
   setVelocity(sf::Vector2f(0.f, 0.f));
