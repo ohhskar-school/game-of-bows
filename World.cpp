@@ -20,7 +20,6 @@ World::World(sf::RenderWindow& window)
       _commandQueue() {
   srand((unsigned)time(0));
   _randValue = rand() % 4;
-  std::cout << _randValue << std::endl;
   switch (_randValue) {
     case 0:
     case 1:
@@ -141,7 +140,7 @@ void World::buildScene() {
   std::unique_ptr<VisualArrow> arrowSprite1(new VisualArrow(arrowTexture, arrowTextureRect, 1));
   _player1->attachChild(std::move(arrowSprite1));
 
-  //Adding Player 2
+  // Adding Player 2
   std::unique_ptr<Character> player2(new Character(Character::Arch::Archer, 2, _textures));
   _player2 = player2.get();
   _player2->setPosition(_spawnPosition2);
@@ -167,7 +166,10 @@ void World::update(sf::Time dt) {
     _sceneGraph.onCommand(_commandQueue.pop(), dt);
   }
   handleCollisions();
-  _sceneGraph.removeArrows();
+  if (hasWon()) {
+    std::cout << "won" << std::endl;
+  }
+  _sceneLayers[Foreground]->removeArrows();
   _sceneGraph.update(dt, _commandQueue);
 }
 
@@ -192,7 +194,6 @@ void World::handleCollisions() {
   std::set<SceneNode::CollisionPair> collisionPairs;
   _sceneGraph.checkSceneCollision(_sceneGraph, collisionPairs);
   for (auto pair : collisionPairs) {
-    std::cout << "collisions" << std::endl;
     // Player Collisions
     if (matchesCategories(pair, Category::Player, Category::Wall)) {
       auto& player = static_cast<Character&>(*pair.first);
@@ -214,4 +215,8 @@ void World::handleCollisions() {
       arrow.handleWallCollision(wall.getBoundRect());
     }
   }
+}
+
+bool World::hasWon() {
+  return _sceneLayers[Ground]->hasWon();
 }

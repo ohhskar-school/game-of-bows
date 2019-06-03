@@ -83,7 +83,6 @@ void Projectile::handleWallCollision(sf::FloatRect wallBounds) {
 
 void Projectile::handlePlayerCollision() {
   if (!getCollidable()) {
-    std::cout << "for deletion" << std::endl;
     _grabbed = true;
   }
 }

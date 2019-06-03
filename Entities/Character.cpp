@@ -82,14 +82,16 @@ void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) c
 unsigned int Character::getCategory() const {
   unsigned int collidable =
       getCollidable() == true ? Category::Collidable : Category::Collidable | Category::IgnoreWallCollide;
+
+  unsigned int dead = _dead ? Category::Dead : Category::None;
+
   switch (_playerNumber) {
     case 1:
-      return (Category::PlayerOne | collidable);
+      return (Category::PlayerOne | collidable | dead);
     case 2:
-      return (Category::PlayerTwo | collidable);
+      return (Category::PlayerTwo | collidable | dead);
     default:
-      return (Category::PlayerOne | collidable);
-      std::cout << "defualt" << std::endl;
+      return (Category::PlayerOne | collidable | dead);
   }
 }
 
@@ -175,7 +177,6 @@ void Character::handleWallCollision(sf::FloatRect wallBounds) {
 void Character::handleArrowCollision(bool grabbable) {
   if (grabbable) {
     _arrowQuantity++;
-    std::cout << _arrowQuantity << std::endl;
   } else {
     _dead = true;
   }

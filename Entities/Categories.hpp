@@ -15,6 +15,7 @@ enum Type {
   ArrowHolder = 1 << 8,
   VisualArrowOne = 1 << 9,
   VisualArrowTwo = 1 << 10,
+  Dead = 1 << 11,
   Player = PlayerOne | PlayerTwo,
 };
 }  // namespace Category

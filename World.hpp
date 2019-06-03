@@ -34,6 +34,7 @@ class World : private sf::NonCopyable {
   void draw();
 
   void handleCollisions();
+  bool hasWon();
 
   // Getters
   CommandQueue& getCommandQueue();
