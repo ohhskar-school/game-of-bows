@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-const sf::Time Game::TimePerFrame = sf::seconds(1.f / 30.f);
+const sf::Time Game::TimePerFrame = sf::seconds(1.f / 45.f);
 
 Game::Game() : _window(sf::VideoMode(768, 576), "World", sf::Style::Close), _world(_window), _fonts(), _textures() {}
 
