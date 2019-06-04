@@ -44,6 +44,8 @@ bool Animation::isRepeating() const { return _repeat; }
 
 void Animation::restart() { _currentFrame = 0; }
 
+void Animation::setScale(float vx, float vy) { _sprite.setScale(vx, vy); }
+
 bool Animation::isFinished() const { return _currentFrame >= _numFrames; }
 
 sf::FloatRect Animation::getLocalBounds() const {

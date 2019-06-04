@@ -7,17 +7,25 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
       _archetype(arch),
       _sprite(textures.get(toTextureId(arch)), sf::IntRect(0, 0, 32, 32)),
       _hitbox(sf::Vector2f(40.f, 32.f)),
-      _idle(textures.get(toTextureIdAnim(Character::_animationState::Idle))),
-      _run(textures.get(toTextureIdAnim(Character::_animationState::Run))),
-      _jump(textures.get(toTextureIdAnim(Character::_animationState::Jump))),
-      _death(textures.get(toTextureIdAnim(Character::_animationState::Death))),
+      
+      _idleLeft(textures.get(toTextureIdAnim(Character::_animationState::IdleLeft))),
+      _runLeft(textures.get(toTextureIdAnim(Character::_animationState::RunLeft))),
+      _jumpLeft(textures.get(toTextureIdAnim(Character::_animationState::JumpLeft))),
+      _deathLeft(textures.get(toTextureIdAnim(Character::_animationState::DeathLeft))),
+
+      _idleRight(textures.get(toTextureIdAnim(Character::_animationState::IdleRight))),
+      _runRight(textures.get(toTextureIdAnim(Character::_animationState::RunRight))),
+      _jumpRight(textures.get(toTextureIdAnim(Character::_animationState::JumpRight))),
+      _deathRight(textures.get(toTextureIdAnim(Character::_animationState::DeathRight))),
       _arrowRotation(0.f),
       _arrowPosition(sf::Vector2f(0.f, 0.f)),
       _arrowQuantity(4),
       _aiming(false),
       _firing(false),
       _countdown(sf::Time::Zero),
-      _dead(false) {
+      _dead(false),
+      _right(true) {
+  setCollidable(true);
   sf::FloatRect bounds = _hitbox.getLocalBounds();
 
   // Creating Actions
@@ -38,47 +46,96 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
   fireArrow.action = [this, &textures](SceneNode& node, sf::Time) { createProjectile(node, textures); };
 
   // Creating Animations
-  _idle.setFrameSize(sf::Vector2i(48, 32));
-  _idle.setNumFrames(8);
-  _idle.setDuration(sf::seconds(1));
-  _idle.setRepeating(true);
+  _idleRight.setFrameSize(sf::Vector2i(48, 32));
+  _idleRight.setNumFrames(8);
+  _idleRight.setDuration(sf::seconds(1));
+  _idleRight.setRepeating(true);
 
-  _run.setFrameSize(sf::Vector2i(48, 32));
-  _run.setNumFrames(8);
-  _run.setDuration(sf::seconds(0.5));
-  _run.setRepeating(true);
+  _runRight.setFrameSize(sf::Vector2i(48, 32));
+  _runRight.setNumFrames(8);
+  _runRight.setDuration(sf::seconds(0.5));
+  _runRight.setRepeating(true);
 
-  _jump.setFrameSize(sf::Vector2i(48, 32));
-  _jump.setNumFrames(6);
-  _jump.setDuration(sf::seconds(0.5));
-  _jump.setRepeating(true);
+  _jumpRight.setFrameSize(sf::Vector2i(48, 32));
+  _jumpRight.setNumFrames(6);
+  _jumpRight.setDuration(sf::seconds(0.5));
+  _jumpRight.setRepeating(true);
 
-  _death.setFrameSize(sf::Vector2i(48, 32));
-  _death.setNumFrames(11);
-  _death.setDuration(sf::seconds(1.5));
+  _deathRight.setFrameSize(sf::Vector2i(48, 32));
+  _deathRight.setNumFrames(11);
+  _deathRight.setDuration(sf::seconds(1.5));
+
+  _idleLeft.setFrameSize(sf::Vector2i(48, 32));
+  _idleLeft.setNumFrames(8);
+  _idleLeft.setDuration(sf::seconds(1));
+  _idleLeft.setRepeating(true);
+
+  _runLeft.setFrameSize(sf::Vector2i(48, 32));
+  _runLeft.setNumFrames(8);
+  _runLeft.setDuration(sf::seconds(0.5));
+  _runLeft.setRepeating(true);
+
+  _jumpLeft.setFrameSize(sf::Vector2i(48, 32));
+  _jumpLeft.setNumFrames(6);
+  _jumpLeft.setDuration(sf::seconds(0.5));
+  _jumpLeft.setRepeating(true);
+
+  _deathLeft.setFrameSize(sf::Vector2i(48, 32));
+  _deathLeft.setNumFrames(11);
+  _deathLeft.setDuration(sf::seconds(1.5));
 }
 
 // Draws and Updates
 
-void Character::updateCurrent(sf::Time dt, CommandQueue& commands) {
-  if (getJumping()) {
-    _jump.update(dt);
-  } else if (getMoving() != 0) {
-    _run.update(dt);
-  } else {
-    _idle.update(dt);
+void Character::updateDirection() {
+  if (getMoving() == 1) {
+    _right = false;
+  } else if (getMoving() == 2) {
+    std::cout << "right" << std::endl;
+    _right = true;
   }
+}
+
+void Character::updateCurrent(sf::Time dt, CommandQueue& commands) {
+  if (_right) {
+    if (getJumping()) {
+      _jumpRight.update(dt);
+    } else if (getMoving() != 0) {
+      _runRight.update(dt);
+    } else {
+      _idleRight.update(dt);
+    }
+  } else {
+    if (getJumping()) {
+      _jumpLeft.update(dt);
+    } else if (getMoving() != 0) {
+      _runLeft.update(dt);
+    } else {
+      _idleLeft.update(dt);
+    }
+  }
+  updateDirection();
   checkProjectileLaunch(dt, commands);
   MovableEntity::updateCurrent(dt, commands);
 }
 
 void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const {
-  if (getJumping()) {
-    target.draw(_jump, states);
-  } else if (getMoving() != 0) {
-    target.draw(_run, states);
+  if (_right) {
+    if (getJumping()) {
+      target.draw(_jumpRight, states);
+    } else if (getMoving() != 0) {
+      target.draw(_runRight, states);
+    } else {
+      target.draw(_idleRight, states);
+    }
   } else {
-    target.draw(_idle, states);
+    if (getJumping()) {
+      target.draw(_jumpLeft, states);
+    } else if (getMoving() != 0) {
+      target.draw(_runLeft, states);
+    } else {
+      target.draw(_idleLeft, states);
+    }
   }
 
   // target.draw(_hitbox, states);
@@ -106,9 +163,9 @@ sf::FloatRect Character::getBoundRect() const { return getWorldTransform().trans
 Textures::ID Character::toTextureId(Character::Arch arch) {
   switch (arch) {
     case Character::Arch::Archer:
-      return Textures::BlueIdle;
+      return Textures::BlueIdleRight;
     default:
-      return Textures::BlueIdle;
+      return Textures::BlueIdleRight;
   }
 }
 
@@ -116,30 +173,46 @@ Textures::ID Character::toTextureIdAnim(Character::_animationState state) {
   switch (_playerNumber) {
     case 1:
       switch (state) {
-        case Idle:
-          return Textures::ID::BlueIdle;
-        case Run:
-          return Textures::ID::BlueRun;
-        case Jump:
-          return Textures::ID::BlueJump;
-        case Death:
-          return Textures::ID::BlueDeath;
+        case IdleRight:
+          return Textures::ID::BlueIdleRight;
+        case RunRight:
+          return Textures::ID::BlueRunRight;
+        case JumpRight:
+          return Textures::ID::BlueJumpRight;
+        case DeathRight:
+          return Textures::ID::BlueDeathRight;
+        case IdleLeft:
+          return Textures::ID::BlueIdleLeft;
+        case RunLeft:
+          return Textures::ID::BlueRunLeft;
+        case JumpLeft:
+          return Textures::ID::BlueJumpLeft;
+        case DeathLeft:
+          return Textures::ID::BlueDeathLeft;
         default:
-          return Textures::ID::BlueIdle;
+          return Textures::ID::BlueIdleRight;
       }
     case 2:
     default:
       switch (state) {
-        case Idle:
-          return Textures::ID::PinkIdle;
-        case Run:
-          return Textures::ID::PinkRun;
-        case Jump:
-          return Textures::ID::PinkJump;
-        case Death:
-          return Textures::ID::PinkDeath;
+        case IdleRight:
+          return Textures::ID::PinkIdleRight;
+        case RunRight:
+          return Textures::ID::PinkRunRight;
+        case JumpRight:
+          return Textures::ID::PinkJumpRight;
+        case DeathRight:
+          return Textures::ID::PinkDeathRight;
+        case IdleLeft:
+          return Textures::ID::PinkIdleLeft;
+        case RunLeft:
+          return Textures::ID::PinkRunLeft;
+        case JumpLeft:
+          return Textures::ID::PinkJumpLeft;
+        case DeathLeft:
+          return Textures::ID::PinkDeathLeft;
         default:
-          return Textures::ID::PinkIdle;
+          return Textures::ID::PinkIdleRight;
       }
   }
 }

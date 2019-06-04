@@ -126,8 +126,8 @@ void Player::handleRealtimeInput(CommandQueue& commands) {
 
 bool Player::isRealtimeAction(Action action) {
   switch (action) {
-      // case MoveLeft:
-      // case MoveRight:
+      case MoveLeft:
+      case MoveRight:
       // case Jump:
       // return true;
 

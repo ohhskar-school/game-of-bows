@@ -165,12 +165,13 @@ void SceneNode::removeArrows() {
 }
 
 bool SceneNode::hasWon() const {
-  if ((getCategory() & Category::Wall) == Category::Wall) {
-    return true;
-  }
+  std::cout << getCategory() << std::endl;
 
-  for (const NodePtr& child : _child) {
-    return child->hasWon();
+  if ((getCategory() & Category::Dead) == Category::Dead) {
+    return true;
+  } else {
+    for (const NodePtr& child : _child) {
+      return child->hasWon();
+    }
   }
-  return false;
 }

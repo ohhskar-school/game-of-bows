@@ -2,13 +2,12 @@
 #define RC_CHARACTER
 
 // User Created
+#include "../Animation.hpp"
 #include "../Commands/CommandQueue.hpp"
 #include "../ResourceManager.hpp"
-#include "../Animation.hpp"
 #include "MovableEntity.hpp"
 #include "Projectile.hpp"
 #include "VisualArrow.hpp"
-
 
 class Character : public MovableEntity {
  public:
@@ -40,21 +39,28 @@ class Character : public MovableEntity {
 
  private:
   // Variable Declarations
-  enum _animationState{
-    Idle,
-    Run,
-    Jump,
-    Death,
+  enum _animationState {
+    IdleRight,
+    RunRight,
+    JumpRight,
+    DeathRight,
+    IdleLeft,
+    RunLeft,
+    JumpLeft,
+    DeathLeft,
   };
   unsigned int _playerNumber;
   Arch _archetype;
   sf::Sprite _sprite;
   sf::RectangleShape _hitbox;
-  Animation _idle;
-  Animation _run;
-  Animation _jump;
-  Animation _death;
-
+  Animation _idleLeft;
+  Animation _runLeft;
+  Animation _jumpLeft;
+  Animation _deathLeft;
+  Animation _idleRight;
+  Animation _runRight;
+  Animation _jumpRight;
+  Animation _deathRight;
   // Aiming & Arrow Values
   float _arrowRotation;
   sf::Vector2f _arrowPosition;
@@ -63,8 +69,10 @@ class Character : public MovableEntity {
   bool _firing;
   sf::Time _countdown;
   bool _dead;
+  bool _right;
 
   void checkProjectileLaunch(sf::Time dt, CommandQueue& commands);
+  void updateDirection();
   Textures::ID toTextureId(Character::Arch);
   Textures::ID toTextureIdAnim(_animationState state);
 };

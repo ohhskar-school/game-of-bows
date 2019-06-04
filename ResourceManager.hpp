@@ -10,16 +10,24 @@
 namespace Textures {
 enum ID {
   // Blue Player Animations
-  BlueRun,
-  BlueIdle,
-  BlueJump,
-  BlueDeath,
+  BlueRunRight,
+  BlueIdleRight,
+  BlueJumpRight,
+  BlueDeathRight,
+  BlueRunLeft,
+  BlueIdleLeft,
+  BlueJumpLeft,
+  BlueDeathLeft,
 
   // Pink Player Animations
-  PinkRun,
-  PinkIdle,
-  PinkJump,
-  PinkDeath,
+  PinkRunRight,
+  PinkIdleRight,
+  PinkJumpRight,
+  PinkDeathRight,
+  PinkRunLeft,
+  PinkIdleLeft,
+  PinkJumpLeft,
+  PinkDeathLeft,
 
   // Wall Textures
   PurpleWall,
