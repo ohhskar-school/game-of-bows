@@ -25,6 +25,7 @@ class ContinueState : public State {
   sf::Sprite _BackgroundSprite;
   std::vector<sf::Text> _Options;
   std::size_t _OptionIndex;
+  sf::Text _continueText;
 };
 
 #endif

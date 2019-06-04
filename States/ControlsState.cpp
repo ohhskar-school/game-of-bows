@@ -18,7 +18,7 @@ ControlsState::ControlsState(StateStack& stack, Context context)
   // A simple menu demonstration
   sf::Text keyboardOption;
   keyboardOption.setFont(font);
-  keyboardOption.setString("Keyboard");
+  keyboardOption.setString("Player 1");
   centerOrigin(keyboardOption);
   keyboardOption.setCharacterSize(16);
   keyboardOption.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(-40.f, 160.f));
@@ -26,7 +26,7 @@ ControlsState::ControlsState(StateStack& stack, Context context)
 
   sf::Text controllerOption;
   controllerOption.setFont(font);
-  controllerOption.setString("Controller");
+  controllerOption.setString("Player 2");
   centerOrigin(controllerOption);
   controllerOption.setCharacterSize(16);
   controllerOption.setPosition(keyboardOption.getPosition() + sf::Vector2f(200.f, 0.f));

@@ -6,7 +6,7 @@ MusicPlayer::MusicPlayer() : _Music(), _Filenames(), _Volume(100.f) {
   _Filenames[Music::GameThemeTwo] = "Assets/music/Towerfall.ogg";
   _Filenames[Music::GameThemeThree] = "Assets/music/Naruto.ogg";
   _Filenames[Music::GameThemeFour] = "Assets/music/Nier.ogg";
-  _Filenames[Music::GameThemeFive] = "Assets/music/Kirby.ogg";
+  _Filenames[Music::GameThemeFive] = "Assets/music/KirbyTheme.ogg";
 }
 
 void MusicPlayer::play(Music::ID theme) {

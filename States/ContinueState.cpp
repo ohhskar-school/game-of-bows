@@ -11,24 +11,29 @@ ContinueState::ContinueState(StateStack& stack, Context context)
   sf::Font& font = context.fonts->get(Fonts::Main);
   sf::Vector2f viewSize = context.window->getView().getSize();
 
-  sf::Text winner;
-  winner.setFont(font);
-  winner.setString("Player has won!");
-  winner.setCharacterSize(16);
-  centerOrigin(winner);
-  winner.setPosition(0.5f * viewSize.x, 0.4f * viewSize.y);
+  _continueText.setFont(font);
+  _continueText.setString("CONTINUE?");
+  _continueText.setCharacterSize(40);
+  centerOrigin(_continueText);
+  _continueText.setPosition(0.5f * viewSize.x, 0.4f * viewSize.y);
 
   sf::Text continueOption;
   continueOption.setFont(font);
-  continueOption.setString("Continue");
+  continueOption.setString("Yes");
   centerOrigin(continueOption);
-  continueOption.setPosition(winner.getPosition() + sf::Vector2f(-40.f, 50.f));
+  continueOption.setCharacterSize(16);
+  continueOption.setPosition(_continueText.getPosition() + sf::Vector2f(-40.f, 50.f));
+  _Options.push_back(continueOption);
 
   sf::Text exitOption;
   exitOption.setFont(font);
-  exitOption.setString("Exit");
+  exitOption.setString("No");
   centerOrigin(exitOption);
+  exitOption.setCharacterSize(16);
   exitOption.setPosition(continueOption.getPosition() + sf::Vector2f(50.f, 0.f));
+  _Options.push_back(exitOption);
+
+  updateOptionText();
 }
 
 void ContinueState::draw() {
@@ -40,6 +45,7 @@ void ContinueState::draw() {
   backgroundShape.setSize(window.getView().getSize());
 
   window.draw(backgroundShape);
+  window.draw(_continueText);
   for (const sf::Text& text : _Options) window.draw(text);
 }
 
@@ -51,16 +57,14 @@ bool ContinueState::handleEvent(const sf::Event& event) {
 
   if (event.key.code == sf::Keyboard::Return) {
     if (_OptionIndex == Continue) {
-      requestStateClear();
       requestStackPush(States::Game);
-    } else if (_OptionIndex == Exit) {
-      // The exit option was chosen, by removing itself, the stack will be empty, and the game will know it is time to
-      // close.
-      requestStackPop();
+    } else {
+      requestStateClear();
+      requestStackPush(States::Menu);
     }
   }
 
-  else if (event.key.code == sf::Keyboard::Up) {
+  else if (event.key.code == sf::Keyboard::Left) {
     // Decrement and wrap-around
     if (_OptionIndex > 0)
       _OptionIndex--;
@@ -70,7 +74,7 @@ bool ContinueState::handleEvent(const sf::Event& event) {
     updateOptionText();
   }
 
-  else if (event.key.code == sf::Keyboard::Down) {
+  else if (event.key.code == sf::Keyboard::Right) {
     // Increment and wrap-around
     if (_OptionIndex < _Options.size() - 1)
       _OptionIndex++;
@@ -80,7 +84,7 @@ bool ContinueState::handleEvent(const sf::Event& event) {
     updateOptionText();
   }
 
-  return true;
+  return false;
 }
 
 void ContinueState::updateOptionText() {

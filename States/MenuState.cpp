@@ -72,11 +72,11 @@ bool MenuState::handleEvent(const sf::Event& event) {
 
   if (event.key.code == sf::Keyboard::Return) {
     if (_OptionIndex == Play) {
-      requestStackPop();
+      requestStateClear();
       requestStackPush(States::Game);
     } else if (_OptionIndex == Controls) {
       requestStackPop();
-      requestStackPush(States::Continue);
+      requestStackPush(States::Controls);
     } else if (_OptionIndex == About) {
       requestStackPop();
       requestStackPush(States::About);
@@ -84,9 +84,7 @@ bool MenuState::handleEvent(const sf::Event& event) {
       requestStackPop();
       requestStackPush(States::Credits);
     } else if (_OptionIndex == Exit) {
-      // The exit option was chosen, by removing itself, the stack will be empty, and the game will know it is time to
-      // close.
-      requestStackPop();
+      requestStateClear();
     }
   }
 

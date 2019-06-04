@@ -1,6 +1,10 @@
 #ifndef RC_GAMESTATE
 #define RC_GAMESTATE
 
+// For Random
+#include <cstdlib>
+#include <ctime>
+
 #include "../Commands/Player.hpp"
 #include "../States/State.hpp"
 #include "../World.hpp"
@@ -19,6 +23,7 @@ class GameState : public State {
  private:
   World _World;
   Player& _Player;
+  unsigned int _randValue;
 };
 
 #endif

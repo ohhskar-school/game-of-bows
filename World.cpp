@@ -143,8 +143,8 @@ void World::buildScene() {
   _sceneLayers[Ground]->attachChild(std::move(player1));
 
   sf::Texture& arrowTexture = _textures.get(Textures::Arrow);
-  sf::IntRect arrowTextureRect(0.f, 0.f, 32.f, 32.f);
-  std::unique_ptr<VisualArrow> arrowSprite1(new VisualArrow(arrowTexture, arrowTextureRect, 1));
+  std::unique_ptr<VisualArrow> arrowSprite1(new VisualArrow(arrowTexture, 1));
+  arrowSprite1->setPosition(-1000.f, -1000.f);
   _player1->attachChild(std::move(arrowSprite1));
 
   // Adding Player 2
@@ -154,7 +154,8 @@ void World::buildScene() {
   _player2->setVelocity(0.f, 0.f);
   _sceneLayers[Ground]->attachChild(std::move(player2));
 
-  std::unique_ptr<VisualArrow> arrowSprite2(new VisualArrow(arrowTexture, arrowTextureRect, 2));
+  std::unique_ptr<VisualArrow> arrowSprite2(new VisualArrow(arrowTexture, 2));
+  arrowSprite2->setPosition(-1000.f, -1000.f);
   _player2->attachChild(std::move(arrowSprite2));
 
   // Adding Arrow Holder
