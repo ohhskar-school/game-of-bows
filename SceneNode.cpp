@@ -165,8 +165,6 @@ void SceneNode::removeArrows() {
 }
 
 bool SceneNode::hasWon() const {
-  std::cout << getCategory() << std::endl;
-
   if ((getCategory() & Category::Dead) == Category::Dead) {
     return true;
   } else {

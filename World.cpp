@@ -44,25 +44,17 @@ void World::loadTextures() {
   // Player Animations
   // Blue
   _textures.load(Textures::ID::BlueRunLeft, "Assets/character/BlueRunLeft.png");
-  _textures.load(Textures::ID::BlueJumpLeft, "Assets/character/BlueJumpLeft.png");
   _textures.load(Textures::ID::BlueIdleLeft, "Assets/character/BlueIdleLeft.png");
-  _textures.load(Textures::ID::BlueDeathLeft, "Assets/character/BlueDeathLeft.png");
 
   _textures.load(Textures::ID::BlueRunRight, "Assets/character/BlueRunRight.png");
-  _textures.load(Textures::ID::BlueJumpRight, "Assets/character/BlueJumpRight.png");
   _textures.load(Textures::ID::BlueIdleRight, "Assets/character/BlueIdleRight.png");
-  _textures.load(Textures::ID::BlueDeathRight, "Assets/character/BlueDeathRight.png");
 
   // Pink
   _textures.load(Textures::ID::PinkRunLeft, "Assets/character/PinkRunLeft.png");
-  _textures.load(Textures::ID::PinkJumpLeft, "Assets/character/PinkJumpLeft.png");
   _textures.load(Textures::ID::PinkIdleLeft, "Assets/character/PinkIdleLeft.png");
-  _textures.load(Textures::ID::PinkDeathLeft, "Assets/character/PinkDeathLeft.png");
 
   _textures.load(Textures::ID::PinkRunRight, "Assets/character/PinkRunRight.png");
-  _textures.load(Textures::ID::PinkJumpRight, "Assets/character/PinkJumpRight.png");
   _textures.load(Textures::ID::PinkIdleRight, "Assets/character/PinkIdleRight.png");
-  _textures.load(Textures::ID::PinkDeathRight, "Assets/character/PinkDeathRight.png");
 
   // Stage
   _textures.load(Textures::ID::PurpleWall, "Assets/background/PurpleWall.png");
@@ -176,9 +168,9 @@ void World::update(sf::Time dt) {
     _sceneGraph.onCommand(_commandQueue.pop(), dt);
   }
   handleCollisions();
-  // if (hasWon()) {
-  //   std::cout << "won" << std::endl;
-  // }
+  if (hasWon()) {
+    std::cout << "won" << std::endl;
+  }
   _sceneLayers[Foreground]->removeArrows();
   _sceneGraph.update(dt, _commandQueue);
 }

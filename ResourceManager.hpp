@@ -12,22 +12,14 @@ enum ID {
   // Blue Player Animations
   BlueRunRight,
   BlueIdleRight,
-  BlueJumpRight,
-  BlueDeathRight,
   BlueRunLeft,
   BlueIdleLeft,
-  BlueJumpLeft,
-  BlueDeathLeft,
 
   // Pink Player Animations
   PinkRunRight,
   PinkIdleRight,
-  PinkJumpRight,
-  PinkDeathRight,
   PinkRunLeft,
   PinkIdleLeft,
-  PinkJumpLeft,
-  PinkDeathLeft,
 
   // Wall Textures
   PurpleWall,

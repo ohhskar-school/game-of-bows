@@ -7,16 +7,10 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
       _archetype(arch),
       _sprite(textures.get(toTextureId(arch)), sf::IntRect(0, 0, 32, 32)),
       _hitbox(sf::Vector2f(40.f, 32.f)),
-
       _idleLeft(textures.get(toTextureIdAnim(Character::_animationState::IdleLeft))),
       _runLeft(textures.get(toTextureIdAnim(Character::_animationState::RunLeft))),
-      _jumpLeft(textures.get(toTextureIdAnim(Character::_animationState::JumpLeft))),
-      _deathLeft(textures.get(toTextureIdAnim(Character::_animationState::DeathLeft))),
-
       _idleRight(textures.get(toTextureIdAnim(Character::_animationState::IdleRight))),
       _runRight(textures.get(toTextureIdAnim(Character::_animationState::RunRight))),
-      _jumpRight(textures.get(toTextureIdAnim(Character::_animationState::JumpRight))),
-      _deathRight(textures.get(toTextureIdAnim(Character::_animationState::DeathRight))),
       _arrowRotation(0.f),
       _arrowPosition(sf::Vector2f(0.f, 0.f)),
       _arrowQuantity(4),
@@ -56,15 +50,6 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
   _runRight.setDuration(sf::seconds(0.5));
   _runRight.setRepeating(true);
 
-  _jumpRight.setFrameSize(sf::Vector2i(48, 32));
-  _jumpRight.setNumFrames(6);
-  _jumpRight.setDuration(sf::seconds(0.5));
-  _jumpRight.setRepeating(true);
-
-  _deathRight.setFrameSize(sf::Vector2i(48, 32));
-  _deathRight.setNumFrames(11);
-  _deathRight.setDuration(sf::seconds(1.5));
-
   _idleLeft.setFrameSize(sf::Vector2i(48, 32));
   _idleLeft.setNumFrames(8);
   _idleLeft.setDuration(sf::seconds(1));
@@ -74,22 +59,11 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
   _runLeft.setNumFrames(8);
   _runLeft.setDuration(sf::seconds(0.5));
   _runLeft.setRepeating(true);
-
-  _jumpLeft.setFrameSize(sf::Vector2i(48, 32));
-  _jumpLeft.setNumFrames(6);
-  _jumpLeft.setDuration(sf::seconds(0.5));
-  _jumpLeft.setRepeating(true);
-
-  _deathLeft.setFrameSize(sf::Vector2i(48, 32));
-  _deathLeft.setNumFrames(11);
-  _deathLeft.setDuration(sf::seconds(1.5));
 }
 
 // Draws and Updates
 
 void Character::updateDirection() {
-  std::cout << getJumping() << getMoving() << std::endl;
-
   if (getMoving() == 1) {
     setCollidable(true);
     _right = false;
@@ -179,18 +153,10 @@ Textures::ID Character::toTextureIdAnim(Character::_animationState state) {
           return Textures::ID::BlueIdleRight;
         case RunRight:
           return Textures::ID::BlueRunRight;
-        case JumpRight:
-          return Textures::ID::BlueJumpRight;
-        case DeathRight:
-          return Textures::ID::BlueDeathRight;
         case IdleLeft:
           return Textures::ID::BlueIdleLeft;
         case RunLeft:
           return Textures::ID::BlueRunLeft;
-        case JumpLeft:
-          return Textures::ID::BlueJumpLeft;
-        case DeathLeft:
-          return Textures::ID::BlueDeathLeft;
         default:
           return Textures::ID::BlueIdleRight;
       }
@@ -201,18 +167,10 @@ Textures::ID Character::toTextureIdAnim(Character::_animationState state) {
           return Textures::ID::PinkIdleRight;
         case RunRight:
           return Textures::ID::PinkRunRight;
-        case JumpRight:
-          return Textures::ID::PinkJumpRight;
-        case DeathRight:
-          return Textures::ID::PinkDeathRight;
         case IdleLeft:
           return Textures::ID::PinkIdleLeft;
         case RunLeft:
           return Textures::ID::PinkRunLeft;
-        case JumpLeft:
-          return Textures::ID::PinkJumpLeft;
-        case DeathLeft:
-          return Textures::ID::PinkDeathLeft;
         default:
           return Textures::ID::PinkIdleRight;
       }

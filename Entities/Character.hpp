@@ -42,12 +42,8 @@ class Character : public MovableEntity {
   enum _animationState {
     IdleRight,
     RunRight,
-    JumpRight,
-    DeathRight,
     IdleLeft,
     RunLeft,
-    JumpLeft,
-    DeathLeft,
   };
   unsigned int _playerNumber;
   Arch _archetype;
