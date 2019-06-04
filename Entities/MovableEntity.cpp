@@ -47,21 +47,26 @@ bool MovableEntity::getJumping() const { return _jumping; }
 unsigned int MovableEntity::getMoving() const { return _moving; }
 
 // Actions
+
 void MovableEntity::control(sf::Vector2f change) {
+  setCollidable(true);
+  changeVelocity(change);
+}
+
+void MovableEntity::changeVelocity(sf::Vector2f change) {
   _velocity += change;
   if (_velocity.x > 240.f) {
-    _velocity.x = 240.f;
     _moving = 2;
+    _velocity.x = 240.f;
   }
   if (_velocity.x < -240.f) {
-    _velocity.x = -240.f;
     _moving = 1;
+    _velocity.x = -240.f;
   }
   if (_velocity.y <= -300.f) {
-    _velocity.y = -300.f;
     _jumping = true;
+    _velocity.y = -300.f;
   }
-  _collidable = true;
 }
 
 void MovableEntity::halt() {

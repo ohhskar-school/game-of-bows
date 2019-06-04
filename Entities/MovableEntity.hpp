@@ -11,6 +11,7 @@ class MovableEntity : public SceneNode {
   void setVelocity(float vx, float vy);
   void setVelocity(float v, bool direction);
   void addGravity(sf::Time dt);
+  void changeVelocity(sf::Vector2f change);
   sf::Vector2f getVelocity() const;
 
   // Updates

@@ -163,3 +163,13 @@ void SceneNode::removeArrows() {
   _child.erase(wreckfieldBegin, _child.end());
   std::for_each(_child.begin(), _child.end(), std::mem_fn(&SceneNode::removeArrows));
 }
+
+bool SceneNode::hasWon() const {
+  if ((getCategory() & Category::Dead) == Category::Dead) {
+    return true;
+  } else {
+    for (const NodePtr& child : _child) {
+      return child->hasWon();
+    }
+  }
+}

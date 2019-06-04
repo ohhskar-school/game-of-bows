@@ -10,7 +10,7 @@
 #include "States/ContinueState.hpp"
 #include "Utilities/Utilities.hpp"
 
-const sf::Time Application::TimePerFrame = sf::seconds(1.f / 60.f);
+const sf::Time Application::TimePerFrame = sf::seconds(1.f / 45.f);
 
 Application::Application()
     : _Window(sf::VideoMode(768, 576), "States", sf::Style::Close),

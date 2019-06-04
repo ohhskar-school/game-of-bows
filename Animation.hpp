@@ -21,6 +21,8 @@ class Animation : public sf::Drawable, public sf::Transformable {
   void setDuration(sf::Time duration);
   sf::Time getDuration() const;
 
+  void setScale(float, float);
+  
   void setRepeating(bool flag);
   bool isRepeating() const;
 

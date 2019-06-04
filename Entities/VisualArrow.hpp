@@ -7,7 +7,7 @@
 class VisualArrow : public SpriteEntity {
  public:
   enum Set { Standard };
-  explicit VisualArrow(const sf::Texture& texture, const sf::IntRect& textureRect);
+  explicit VisualArrow(const sf::Texture& texture, const sf::IntRect& textureRect, unsigned int playerNumber);
 
   // Draws
   void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -20,5 +20,6 @@ class VisualArrow : public SpriteEntity {
   sf::Sprite _sprite;
   sf::Vector2f _position;
   float _rotation;
+  unsigned int _playerNumber;
 };
 #endif

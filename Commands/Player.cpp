@@ -44,9 +44,8 @@ struct DoNothing {
   DoNothing() {}
 
   // Making the operator
-  void operator()(Character& player, sf::Time) const { }
+  void operator()(Character& player, sf::Time) const {}
 };
-
 
 Player::Player() : _vertical(0), _horizontal(0) {
   _keyBinding[sf::Keyboard::A] = MoveLeft;
@@ -126,10 +125,10 @@ void Player::handleRealtimeInput(CommandQueue& commands) {
 
 bool Player::isRealtimeAction(Action action) {
   switch (action) {
-      // case MoveLeft:
-      // case MoveRight:
-      // case Jump:
-      // return true;
+  //   case MoveLeft:
+  //   case MoveRight:
+  //   case Jump:
+  //     return true;
 
     default:
       return false;

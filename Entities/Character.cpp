@@ -7,67 +7,112 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
       _archetype(arch),
       _sprite(textures.get(toTextureId(arch)), sf::IntRect(0, 0, 32, 32)),
       _hitbox(sf::Vector2f(40.f, 32.f)),
-      _idle(textures.get(toTextureIdAnim(Character::_animationState::Idle))),
-      _run(textures.get(toTextureIdAnim(Character::_animationState::Run))),
-      _jump(textures.get(toTextureIdAnim(Character::_animationState::Jump))),
-      _death(textures.get(toTextureIdAnim(Character::_animationState::Death))),
+      _idleLeft(textures.get(toTextureIdAnim(Character::_animationState::IdleLeft))),
+      _runLeft(textures.get(toTextureIdAnim(Character::_animationState::RunLeft))),
+      _idleRight(textures.get(toTextureIdAnim(Character::_animationState::IdleRight))),
+      _runRight(textures.get(toTextureIdAnim(Character::_animationState::RunRight))),
       _arrowRotation(0.f),
       _arrowPosition(sf::Vector2f(0.f, 0.f)),
       _arrowQuantity(4),
       _aiming(false),
       _firing(false),
       _countdown(sf::Time::Zero),
-      _dead(false) {
-  // Creating Actions
+      _dead(false),
+      _right(true) {
+  setCollidable(true);
   sf::FloatRect bounds = _hitbox.getLocalBounds();
+
+  // Creating Actions
+
+  switch (_playerNumber) {
+    case 1:
+      setArrowAim.category = Category::VisualArrowOne;
+      break;
+    case 2:
+      setArrowAim.category = Category::VisualArrowTwo;
+      break;
+    default:
+      setArrowAim.category = Category::VisualArrowOne;
+      break;
+  }
   setOrigin(std::floor(bounds.left + bounds.width / 2.f), std::floor(bounds.top + bounds.height / 2.f));
-  // _hitbox.setFillColor(sf::Color::White);
-  setArrowAim.category = Category::VisualArrow;
   fireArrow.category = Category::ArrowHolder;
   fireArrow.action = [this, &textures](SceneNode& node, sf::Time) { createProjectile(node, textures); };
 
   // Creating Animations
-  _idle.setFrameSize(sf::Vector2i(48, 32));
-  _idle.setNumFrames(8);
-  _idle.setDuration(sf::seconds(1));
-  _idle.setRepeating(true);
+  _idleRight.setFrameSize(sf::Vector2i(48, 32));
+  _idleRight.setNumFrames(8);
+  _idleRight.setDuration(sf::seconds(1));
+  _idleRight.setRepeating(true);
 
-  _run.setFrameSize(sf::Vector2i(48, 32));
-  _run.setNumFrames(8);
-  _run.setDuration(sf::seconds(0.5));
-  _run.setRepeating(true);
+  _runRight.setFrameSize(sf::Vector2i(48, 32));
+  _runRight.setNumFrames(8);
+  _runRight.setDuration(sf::seconds(0.5));
+  _runRight.setRepeating(true);
 
-  _jump.setFrameSize(sf::Vector2i(48, 32));
-  _jump.setNumFrames(6);
-  _jump.setDuration(sf::seconds(0.5));
-  _jump.setRepeating(true);
+  _idleLeft.setFrameSize(sf::Vector2i(48, 32));
+  _idleLeft.setNumFrames(8);
+  _idleLeft.setDuration(sf::seconds(1));
+  _idleLeft.setRepeating(true);
 
-  _death.setFrameSize(sf::Vector2i(48, 32));
-  _death.setNumFrames(11);
-  _death.setDuration(sf::seconds(1.5));
+  _runLeft.setFrameSize(sf::Vector2i(48, 32));
+  _runLeft.setNumFrames(8);
+  _runLeft.setDuration(sf::seconds(0.5));
+  _runLeft.setRepeating(true);
 }
 
 // Draws and Updates
 
-void Character::updateCurrent(sf::Time dt, CommandQueue& commands) {
-  if (getJumping()) {
-    _jump.update(dt);
-  } else if (getMoving() != 0) {
-    _run.update(dt);
+void Character::updateDirection() {
+  if (getMoving() == 1) {
+    setCollidable(true);
+    _right = false;
+    _running = true;
+  } else if (getMoving() == 2) {
+    setCollidable(true);
+    _right = true;
+    _running = true;
   } else {
-    _idle.update(dt);
+    _running = false;
+  }
+  
+  if (getJumping()) {
+    _jumping = true;
+  }
+}
+
+void Character::updateCurrent(sf::Time dt, CommandQueue& commands) {
+  updateDirection();
+  if (_right) {
+    if (_running) {
+      _runRight.update(dt);
+    } else {
+      _idleRight.update(dt);
+    }
+  } else {
+    if (_running) {
+      _runLeft.update(dt);
+    } else {
+      _idleLeft.update(dt);
+    }
   }
   checkProjectileLaunch(dt, commands);
   MovableEntity::updateCurrent(dt, commands);
 }
 
 void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const {
-  if (getJumping()) {
-    target.draw(_jump, states);
-  } else if (getMoving() != 0) {
-    target.draw(_run, states);
+  if (_right) {
+    if (_running) {
+      target.draw(_runRight, states);
+    } else {
+      target.draw(_idleRight, states);
+    }
   } else {
-    target.draw(_idle, states);
+    if (_running) {
+      target.draw(_runLeft, states);
+    } else {
+      target.draw(_idleLeft, states);
+    }
   }
 
   // target.draw(_hitbox, states);
@@ -76,13 +121,15 @@ void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) c
 unsigned int Character::getCategory() const {
   unsigned int collidable =
       getCollidable() == true ? Category::Collidable : Category::Collidable | Category::IgnoreWallCollide;
+
+  unsigned int dead = _dead ? Category::Dead : Category::None;
   switch (_playerNumber) {
     case 1:
-      return (Category::PlayerOne | collidable);
+      return (Category::PlayerOne | collidable | dead);
     case 2:
-      return (Category::PlayerTwo | collidable);
+      return (Category::PlayerTwo | collidable | dead);
     default:
-      return (Category::PlayerOne | collidable);
+      return (Category::PlayerOne | collidable | dead);
   }
 }
 
@@ -92,9 +139,9 @@ sf::FloatRect Character::getBoundRect() const { return getWorldTransform().trans
 Textures::ID Character::toTextureId(Character::Arch arch) {
   switch (arch) {
     case Character::Arch::Archer:
-      return Textures::BlueIdle;
+      return Textures::BlueIdleRight;
     default:
-      return Textures::BlueIdle;
+      return Textures::BlueIdleRight;
   }
 }
 
@@ -102,30 +149,30 @@ Textures::ID Character::toTextureIdAnim(Character::_animationState state) {
   switch (_playerNumber) {
     case 1:
       switch (state) {
-        case Idle:
-          return Textures::ID::BlueIdle;
-        case Run:
-          return Textures::ID::BlueRun;
-        case Jump:
-          return Textures::ID::BlueJump;
-        case Death:
-          return Textures::ID::BlueDeath;
+        case IdleRight:
+          return Textures::ID::BlueIdleRight;
+        case RunRight:
+          return Textures::ID::BlueRunRight;
+        case IdleLeft:
+          return Textures::ID::BlueIdleLeft;
+        case RunLeft:
+          return Textures::ID::BlueRunLeft;
         default:
-          return Textures::ID::BlueIdle;
+          return Textures::ID::BlueIdleRight;
       }
     case 2:
     default:
       switch (state) {
-        case Idle:
-          return Textures::ID::PinkIdle;
-        case Run:
-          return Textures::ID::PinkRun;
-        case Jump:
-          return Textures::ID::PinkJump;
-        case Death:
-          return Textures::ID::PinkDeath;
+        case IdleRight:
+          return Textures::ID::PinkIdleRight;
+        case RunRight:
+          return Textures::ID::PinkRunRight;
+        case IdleLeft:
+          return Textures::ID::PinkIdleLeft;
+        case RunLeft:
+          return Textures::ID::PinkRunLeft;
         default:
-          return Textures::ID::PinkIdle;
+          return Textures::ID::PinkIdleRight;
       }
   }
 }
@@ -146,20 +193,17 @@ void Character::handleWallCollision(sf::FloatRect wallBounds) {
   float right = wallRight - ownBounds.left;
   if (top < bot && top < left && top < right) {
     move(sf::Vector2f(0.f, -top));
-    setVelocity(0.f, false);
     setCollidable(false);
-
+    setJumping(false);
+    setVelocity(0.f, false);
   } else if (bot < top && bot < left && bot < right) {
     move(sf::Vector2f(0.f, bot));
     setVelocity(0.f, false);
-    // disables wall collisions;
   } else if (left < right && left < top && left < bot) {
     move(sf::Vector2f(-left, 0.f));
-    setVelocity(0.f, true);
 
   } else if (right < left && right < top && right < bot) {
     move(sf::Vector2f(right, 0.f));
-    setVelocity(0.f, true);
   }
 
   // https://stackoverflow.com/questions/5062833/detecting-the-direction-of-a-collision
