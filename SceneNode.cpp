@@ -164,12 +164,12 @@ void SceneNode::removeArrows() {
   std::for_each(_child.begin(), _child.end(), std::mem_fn(&SceneNode::removeArrows));
 }
 
-bool SceneNode::hasWon() const {
+void SceneNode::hasWon(bool& check) const{
   if ((getCategory() & Category::Dead) == Category::Dead) {
-    return true;
+    check = true;
   } else {
     for (const NodePtr& child : _child) {
-      return child->hasWon();
+      child->hasWon(check);
     }
   }
 }

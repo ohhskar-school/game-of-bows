@@ -17,7 +17,9 @@ World::World(sf::RenderWindow& window)
       _textures(),
       _player1(nullptr),
       _player2(nullptr),
-      _commandQueue() {
+      _commandQueue(),
+      _hasWonDefault(false),
+      _hasWonCheck(_hasWonDefault) {
   srand((unsigned)time(0));
   _randValue = rand() % 4;
   switch (_randValue) {
@@ -33,7 +35,9 @@ World::World(sf::RenderWindow& window)
       _mapArray = mapFour;
       break;
   }
-
+  if (hasWon()) {
+    std::cout << "won" << std::endl;
+  }
   loadTextures();
   buildScene();
   _worldView.setCenter(_worldView.getSize().x / 2.f, _worldView.getSize().y / 2.f);
@@ -168,9 +172,7 @@ void World::update(sf::Time dt) {
     _sceneGraph.onCommand(_commandQueue.pop(), dt);
   }
   handleCollisions();
-  if (hasWon()) {
-    std::cout << "won" << std::endl;
-  }
+  hasWonFinder();
   _sceneLayers[Foreground]->removeArrows();
   _sceneGraph.update(dt, _commandQueue);
 }
@@ -219,4 +221,10 @@ void World::handleCollisions() {
   }
 }
 
-bool World::hasWon() { return _sceneLayers[Ground]->hasWon(); }
+void World::hasWonFinder() {
+  _sceneLayers[Ground]->hasWon(_hasWonCheck);
+}
+
+bool World::hasWon(){
+  return _hasWonCheck;
+}

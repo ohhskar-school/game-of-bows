@@ -35,6 +35,7 @@ class World : private sf::NonCopyable {
 
   void handleCollisions();
   bool hasWon();
+  void hasWonFinder();
 
   // Getters
   CommandQueue& getCommandQueue();
@@ -65,6 +66,9 @@ class World : private sf::NonCopyable {
   // commands
   CommandQueue _commandQueue;
 
+  //hasWon
+  bool _hasWonDefault;
+  bool& _hasWonCheck;
   unsigned int _randValue;
 
   void loadTextures();
