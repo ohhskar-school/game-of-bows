@@ -24,6 +24,7 @@
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
 #include "Sounds/SoundPlayer.hpp"
+#include "Sounds/SoundNode.hpp"
 
 class World : private sf::NonCopyable {
  public:

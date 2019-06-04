@@ -1,4 +1,5 @@
 #include "SoundNode.hpp"
+#include <iostream>
 #include "SoundPlayer.hpp"
 
 SoundNode::SoundNode(SoundPlayer& player) : SceneNode(), _Sounds(player) {}

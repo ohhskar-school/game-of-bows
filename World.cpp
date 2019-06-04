@@ -39,9 +39,6 @@ World::World(sf::RenderWindow& window, SoundPlayer& sounds)
       break;
   }
   _randValue = rand() % 4;
-  if (hasWon()) {
-    std::cout << "won" << std::endl;
-  }
   loadTextures();
   buildScene();
   _worldView.setCenter(_worldView.getSize().x / 2.f, _worldView.getSize().y / 2.f);
@@ -164,6 +161,10 @@ void World::buildScene() {
   // Adding Arrow Holder
   std::unique_ptr<ArrowHolder> arrow(new ArrowHolder());
   _sceneLayers[Foreground]->attachChild(std::move(arrow));
+
+  // Adding Sound
+  std::unique_ptr<SoundNode> sound(new SoundNode(_sounds));
+  _sceneLayers[HUD]->attachChild(std::move(sound));
 }
 
 // Functions that update every tick
@@ -185,7 +186,7 @@ void World::update(sf::Time dt) {
 
 void World::updateSounds() {
   // Set listener's position to player position
-  // _Sounds.setListenerPosition(mPlayerAircraft->getWorldPosition());
+  _sounds.setListenerPosition(_player1->getWorldPosition());
 
   // Remove unused sounds
   _sounds.removeStoppedSounds();

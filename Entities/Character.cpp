@@ -147,17 +147,6 @@ Textures::ID Character::toTextureId(Character::Arch arch) {
   }
 }
 
-void Character::playLocalSound(CommandQueue& commands, SoundEffect::ID effect) {
-  sf::Vector2f worldPosition = getWorldPosition();
-
-  Command command;
-  command.category = Category::SoundEffect;
-  command.action = derivedAction<SoundNode>(
-      [effect, worldPosition](SoundNode& node, sf::Time) { node.playSound(effect, worldPosition); });
-
-  commands.push(command);
-}
-
 Textures::ID Character::toTextureIdAnim(Character::_animationState state) {
   switch (_playerNumber) {
     case 1:
@@ -244,6 +233,30 @@ struct AimArrow {
   void operator()(VisualArrow& arrow, sf::Time) const { arrow.aim(position, rotation); }
 };
 
+struct PlaySound {
+  // Variable Declerations
+  SoundEffect::ID soundEffect;
+  sf::Vector2f position;
+
+  // Creating Constructor
+  PlaySound(SoundEffect::ID effect, sf::Vector2f worldPosition) : soundEffect(effect), position(worldPosition) {}
+
+  // Making the operator
+  void operator()(SoundNode& sound, sf::Time) const { sound.playSound(soundEffect, position); }
+};
+
+
+
+void Character::playLocalSound(CommandQueue& commands, SoundEffect::ID effect) {
+  sf::Vector2f worldPosition = getWorldPosition();
+
+  Command command;
+  command.category = Category::SoundEffect;
+  command.action = derivedAction<SoundNode>(PlaySound(effect, worldPosition));
+  commands.push(command);
+}
+
+
 void Character::aim(unsigned int y, unsigned int x, CommandQueue& commands) {
   _aiming = true;
   _arrowRotation = 0.f;
@@ -300,7 +313,7 @@ void Character::aim(unsigned int y, unsigned int x, CommandQueue& commands) {
   // Creating the command
   setArrowAim.action = derivedAction<VisualArrow>(AimArrow(_arrowPosition, _arrowRotation));
   commands.push(setArrowAim);
-  playLocalSound(commands, SoundEffect::MenuStart);
+  // playLocalSound(commands, SoundEffect::MenuStart);
 }
 
 void Character::createProjectile(SceneNode& node, const TextureHolder& textures) const {
