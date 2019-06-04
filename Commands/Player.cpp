@@ -108,6 +108,21 @@ void Player::handleEvent(const sf::Event& event, CommandQueue& commands) {
     }
   }
 
+  if (event.type == sf::Event::JoystickButtonPressed) {
+    if (event.joystickButton.button == 6) {
+      Command jump;
+      jump.category = Category::PlayerTwo;
+      jump.action = derivedAction<Character>(MovePlayer(0.f, -250.f));
+      commands.push(jump);
+    }
+    if (event.joystickButton.button == 7) {
+      Command shoot;
+      shoot.category = Category::PlayerTwo;
+      shoot.action = derivedAction<Character>(FireArrow());
+      commands.push(shoot);
+    }
+  }
+
   // Handle Aiming
   Command aim;
   aim.category = Category::PlayerOne;
@@ -116,19 +131,83 @@ void Player::handleEvent(const sf::Event& event, CommandQueue& commands) {
 }
 
 void Player::handleRealtimeInput(CommandQueue& commands) {
+  sf::Joystick::update();
+
   for (auto& pair : _keyBinding) {
     if (sf::Keyboard::isKeyPressed(pair.first) && isRealtimeAction(pair.second)) {
       commands.push(_actionBindingPress[pair.second]);
     }
   }
+  if (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 15.f) {
+    Command moveRight;
+    moveRight.category = Category::PlayerTwo;
+    moveRight.action = derivedAction<Character>(MovePlayer(250.f, 0.f));
+    commands.push(moveRight);
+  }
+
+  if (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -15.f) {
+    Command moveLeft;
+    moveLeft.category = Category::PlayerTwo;
+    moveLeft.action = derivedAction<Character>(MovePlayer(-250.f, 0.f));
+    commands.push(moveLeft);
+  }
+
+  if (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > -15.f &&
+      sf::Joystick::getAxisPosition(0, sf::Joystick::X) < 15.f) {
+    Command halt;
+    halt.category = Category::PlayerTwo;
+    halt.action = derivedAction<Character>(Halt());
+    commands.push(halt);
+  }
+
+  if (sf::Joystick::getAxisPosition(0, sf::Joystick::U) < -50.f) {
+    Command aim;
+    aim.category = Category::PlayerTwo;
+    float y = sf::Joystick::getAxisPosition(0, sf::Joystick::V);
+    if (y > 45.f) {
+      aim.action = derivedAction<Character>(Aim(2, 1, commands));
+    } else if (y < -45.f) {
+      aim.action = derivedAction<Character>(Aim(1, 1, commands));
+    } else {
+      aim.action = derivedAction<Character>(Aim(0, 1, commands));
+    }
+    commands.push(aim);
+  } else if (sf::Joystick::getAxisPosition(0, sf::Joystick::U) > 50.f) {
+    Command aim;
+    aim.category = Category::PlayerTwo;
+    float y = sf::Joystick::getAxisPosition(0, sf::Joystick::V);
+    if (y > 45.f) {
+      aim.action = derivedAction<Character>(Aim(2, 2, commands));
+    } else if (y < -45.f) {
+      aim.action = derivedAction<Character>(Aim(1, 2, commands));
+    } else {
+      aim.action = derivedAction<Character>(Aim(0, 2, commands));
+    }
+    commands.push(aim);
+  } else if (sf::Joystick::getAxisPosition(0, sf::Joystick::V) > 50.f) {
+    Command aim;
+    aim.category = Category::PlayerTwo;
+    aim.action = derivedAction<Character>(Aim(2, 0, commands));
+    commands.push(aim);
+  } else if (sf::Joystick::getAxisPosition(0, sf::Joystick::V) < -50.f) {
+    Command aim;
+    aim.category = Category::PlayerTwo;
+    aim.action = derivedAction<Character>(Aim(1, 0, commands));
+    commands.push(aim);
+  } else {
+    Command aim;
+    aim.category = Category::PlayerTwo;
+    aim.action = derivedAction<Character>(Aim(0, 0, commands));
+    commands.push(aim);
+  }
 }
 
 bool Player::isRealtimeAction(Action action) {
   switch (action) {
-  //   case MoveLeft:
-  //   case MoveRight:
-  //   case Jump:
-  //     return true;
+      //   case MoveLeft:
+      //   case MoveRight:
+      //   case Jump:
+      //     return true;
 
     default:
       return false;

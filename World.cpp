@@ -146,14 +146,14 @@ void World::buildScene() {
   _player1->attachChild(std::move(arrowSprite1));
 
   // Adding Player 2
-  // std::unique_ptr<Character> player2(new Character(Character::Arch::Archer, 2, _textures));
-  // _player2 = player2.get();
-  // _player2->setPosition(_spawnPosition2);
-  // _player2->setVelocity(0.f, 0.f);
-  // _sceneLayers[Ground]->attachChild(std::move(player2));
+  std::unique_ptr<Character> player2(new Character(Character::Arch::Archer, 2, _textures));
+  _player2 = player2.get();
+  _player2->setPosition(_spawnPosition2);
+  _player2->setVelocity(0.f, 0.f);
+  _sceneLayers[Ground]->attachChild(std::move(player2));
 
-  // std::unique_ptr<VisualArrow> arrowSprite2(new VisualArrow(arrowTexture, 2));
-  // _player2->attachChild(std::move(arrowSprite2));
+  std::unique_ptr<VisualArrow> arrowSprite2(new VisualArrow(arrowTexture, 2));
+  _player2->attachChild(std::move(arrowSprite2));
 
   // Adding Arrow Holder
   std::unique_ptr<ArrowHolder> arrow(new ArrowHolder());

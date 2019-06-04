@@ -75,7 +75,7 @@ void Character::updateDirection() {
   } else {
     _running = false;
   }
-  
+
   if (getJumping()) {
     _jumping = true;
   }
