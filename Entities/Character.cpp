@@ -115,7 +115,7 @@ void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) c
     }
   }
 
-  target.draw(_hitbox, states);
+  // target.draw(_hitbox, states);
 }
 
 unsigned int Character::getCategory() const {
