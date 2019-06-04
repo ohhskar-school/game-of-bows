@@ -2,8 +2,8 @@
 #include <iostream>
 #include "Maps/MapFour.hpp"
 #include "Maps/MapOne.hpp"
-// #include "Maps/MapThree.hpp"
-// #include "Maps/MapTwo.hpp"
+#include "Maps/MapThree.hpp"
+#include "Maps/MapTwo.hpp"
 
 World::World(sf::RenderWindow& window, SoundPlayer& sounds)
     : _window(window),
@@ -25,11 +25,13 @@ World::World(sf::RenderWindow& window, SoundPlayer& sounds)
   _randValue = rand() % 4;
   switch (_randValue) {
     case 0:
-    case 1:
       _mapArray = mapOne;
       break;
+    case 1:
+      _mapArray = mapTwo;
+      break;
     case 2:
-      _mapArray = mapFour;
+      _mapArray = mapThree;
       break;
     case 3:
     default:
