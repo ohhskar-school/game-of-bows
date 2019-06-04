@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall -std=c++11 
 LDFLAGS=
-LIBFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
+LIBFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 SOURCES=$(wildcard */*.cpp) $(wildcard *.cpp)
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=a

@@ -1,27 +1,31 @@
 #include "MusicPlayer.hpp"
 
-MusicPlayer::MusicPlayer() : mMusic(), mFilenames(), mVolume(100.f) {
-  mFilenames[Music::MenuTheme] = "Media/Music/MenuTheme.ogg";
-  mFilenames[Music::MissionTheme] = "Media/Music/MissionTheme.ogg";
+MusicPlayer::MusicPlayer() : _Music(), _Filenames(), _Volume(100.f) {
+  _Filenames[Music::MenuTheme] = "../Assets/music/Castlevania.ogg";
+  _Filenames[Music::GameThemeOne] = "../Assets/music/Undertale.ogg";
+  _Filenames[Music::GameThemeTwo] = "../Assets/music/Towerfall.ogg";
+  _Filenames[Music::GameThemeThree] = "../Assets/music/Naruto.ogg";
+  _Filenames[Music::GameThemeFour] = "../Assets/music/Nier.ogg";
+  _Filenames[Music::GameThemeFive] = "../Assets/music/Kirby.ogg";
 }
 
 void MusicPlayer::play(Music::ID theme) {
-  std::string filename = mFilenames[theme];
+  std::string filename = _Filenames[theme];
 
-  if (!mMusic.openFromFile(filename)) throw std::runtime_error("Music " + filename + " could not be loaded.");
+  if (!_Music.openFromFile(filename)) throw std::runtime_error("Music " + filename + " could not be loaded.");
 
-  mMusic.setVolume(mVolume);
-  mMusic.setLoop(true);
-  mMusic.play();
+  _Music.setVolume(_Volume);
+  _Music.setLoop(true);
+  _Music.play();
 }
 
-void MusicPlayer::stop() { mMusic.stop(); }
+void MusicPlayer::stop() { _Music.stop(); }
 
-void MusicPlayer::setVolume(float volume) { mVolume = volume; }
+void MusicPlayer::setVolume(float volume) { _Volume = volume; }
 
 void MusicPlayer::setPaused(bool paused) {
   if (paused)
-    mMusic.pause();
+    _Music.pause();
   else
-    mMusic.play();
+    _Music.play();
 }

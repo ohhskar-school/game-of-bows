@@ -8,6 +8,10 @@
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Vector2.hpp>
 
+
+#include <SFML/Audio/Listener.hpp>
+#include <cmath>
+
 #include <list>
 
 class SoundPlayer : private sf::NonCopyable {
@@ -22,8 +26,8 @@ class SoundPlayer : private sf::NonCopyable {
   sf::Vector2f getListenerPosition() const;
 
  private:
-  SoundBufferHolder mSoundBuffers;
-  std::list<sf::Sound> mSounds;
+  SoundBufferHolder _SoundBuffers;
+  std::list<sf::Sound> _Sounds;
 };
 
 #endif

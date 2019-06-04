@@ -1,8 +1,8 @@
 #ifndef RC_RESOURCE
 #define RC_RESOURCE
 
-#include <SFML/Graphics.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
+#include <SFML/Graphics.hpp>
 #include <cassert>
 #include <map>
 #include <memory>
@@ -72,23 +72,19 @@ enum ID { Main };
 };  // namespace Fonts
 
 namespace SoundEffect {
-enum ID {
-  AlliedGunfire,
-  EnemyGunfire,
-  Explosion1,
-  Explosion2,
-  LaunchMissile,
-  CollectPickup,
-  Button,
-};
-} // namespace SoundEffect
+enum ID { MenuStart, ArrowRecover, ArrowFire, PlayerDeath, PlayerJump, PlayerLand, PlayerReady };
+}  // namespace SoundEffect
 
 namespace Music {
 enum ID {
   MenuTheme,
-  MissionTheme,
+  GameThemeOne,
+  GameThemeTwo,
+  GameThemeThree,
+  GameThemeFour,
+  GameThemeFive,
 };
-} // namespace Music
+}  // namespace Music
 
 template <typename Resource, typename Identifier>
 class ResourceHolder {
@@ -96,6 +92,9 @@ class ResourceHolder {
   void load(Identifier, const std::string&);
   Resource& get(Identifier);
   const Resource& get(Identifier) const;
+
+  template <typename Parameter>
+  void load(Identifier id, const std::string& filename, const Parameter& secondParam);
 
  private:
   std::map<Identifier, std::unique_ptr<Resource>> mResourceMap;
@@ -109,6 +108,6 @@ template class ResourceHolder<sf::Font, Fonts::ID>;
 typedef ResourceHolder<sf::Font, Fonts::ID> FontHolder;
 
 template class ResourceHolder<sf::SoundBuffer, SoundEffect::ID>;
-typedef ResourceHolder<sf::SoundBuffer, SoundEffect::ID>	SoundBufferHolder;
+typedef ResourceHolder<sf::SoundBuffer, SoundEffect::ID> SoundBufferHolder;
 
 #endif

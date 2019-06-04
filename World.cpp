@@ -219,4 +219,4 @@ void World::handleCollisions() {
   }
 }
 
-bool World::hasWon() { return _sceneLayers[Ground]->hasWon(); }
+// bool World::hasWon() { return _sceneLayers[Ground]->hasWon(); }

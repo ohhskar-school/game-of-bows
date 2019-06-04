@@ -20,9 +20,9 @@ class MusicPlayer : private sf::NonCopyable {
   void setVolume(float volume);
 
  private:
-  sf::Music mMusic;
-  std::map<Music::ID, std::string> mFilenames;
-  float mVolume;
+  sf::Music _Music;
+  std::map<Music::ID, std::string> _Filenames;
+  float _Volume;
 };
 
 #endif  // BOOK_MUSICPLAYER_HPP

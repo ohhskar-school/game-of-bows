@@ -1,8 +1,5 @@
 #include "SoundPlayer.hpp"
 
-#include <SFML/Audio/Listener.hpp>
-
-#include <cmath>
 
 namespace {
 // Sound coordinate system, point of view of a player in front of the screen:
@@ -13,15 +10,14 @@ const float MinDistance2D = 200.f;
 const float MinDistance3D = std::sqrt(MinDistance2D * MinDistance2D + ListenerZ * ListenerZ);
 }  // namespace
 
-SoundPlayer::SoundPlayer() : mSoundBuffers(), mSounds() {
-//   mSoundBuffers.load(SoundEffect::AlliedGunfire, "Media/Sound/AlliedGunfire.wav");
-//   mSoundBuffers.load(SoundEffect::EnemyGunfire, "Media/Sound/EnemyGunfire.wav");
-//   mSoundBuffers.load(SoundEffect::Explosion1, "Media/Sound/Explosion1.wav");
-//   mSoundBuffers.load(SoundEffect::Explosion2, "Media/Sound/Explosion2.wav");
-//   mSoundBuffers.load(SoundEffect::LaunchMissile, "Media/Sound/LaunchMissile.wav");
-//   mSoundBuffers.load(SoundEffect::CollectPickup, "Media/Sound/CollectPickup.wav");
-//   mSoundBuffers.load(SoundEffect::Button, "Media/Sound/Button.wav");
-
+SoundPlayer::SoundPlayer() : _SoundBuffers(), _Sounds() {
+  _SoundBuffers.load(SoundEffect::MenuStart, "../Assets/sfx/start.wav");
+  _SoundBuffers.load(SoundEffect::ArrowRecover, "../Assets/sfx/arrowRecover.wav");
+  _SoundBuffers.load(SoundEffect::ArrowFire, "../Assets/sfx/fireArrow.wav");
+  _SoundBuffers.load(SoundEffect::PlayerJump, "../Assets/sfx/playerJump.wav");
+  _SoundBuffers.load(SoundEffect::PlayerDeath, "../Assets/sfx/playerDeath.wav");
+  _SoundBuffers.load(SoundEffect::PlayerLand, "../Assets/sfx/playerLand.wav");
+  _SoundBuffers.load(SoundEffect::PlayerReady, "../Assets/sfx/playerReady.wav");
   // Listener points towards the screen (default in SFML)
   sf::Listener::setDirection(0.f, 0.f, -1.f);
 }
@@ -29,10 +25,10 @@ SoundPlayer::SoundPlayer() : mSoundBuffers(), mSounds() {
 void SoundPlayer::play(SoundEffect::ID effect) { play(effect, getListenerPosition()); }
 
 void SoundPlayer::play(SoundEffect::ID effect, sf::Vector2f position) {
-  mSounds.push_back(sf::Sound());
-  sf::Sound& sound = mSounds.back();
+  _Sounds.push_back(sf::Sound());
+  sf::Sound& sound = _Sounds.back();
 
-  sound.setBuffer(mSoundBuffers.get(effect));
+  sound.setBuffer(_SoundBuffers.get(effect));
   sound.setPosition(position.x, -position.y, 0.f);
   sound.setAttenuation(Attenuation);
   sound.setMinDistance(MinDistance3D);
@@ -41,7 +37,7 @@ void SoundPlayer::play(SoundEffect::ID effect, sf::Vector2f position) {
 }
 
 void SoundPlayer::removeStoppedSounds() {
-  mSounds.remove_if([](const sf::Sound& s) { return s.getStatus() == sf::Sound::Stopped; });
+  _Sounds.remove_if([](const sf::Sound& s) { return s.getStatus() == sf::Sound::Stopped; });
 }
 
 void SoundPlayer::setListenerPosition(sf::Vector2f position) {

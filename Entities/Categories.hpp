@@ -17,7 +17,7 @@ enum Type {
   VisualArrowTwo = 1 << 10,
   Dead = 1 << 11,
   Player = PlayerOne | PlayerTwo,
-  SoundEffect
+  SoundEffect = 1 << 12,
 };
 }  // namespace Category
 

@@ -1,8 +1,8 @@
 #ifndef RC_SOUNDNODE
 #define RC_SOUNDNODE
 
-#include "../ResourceManager.hpp";
-#include "../SceneNode.hpp";
+#include "../ResourceManager.hpp"
+#include "../SceneNode.hpp"
 
 class SoundPlayer;
 
