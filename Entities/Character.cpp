@@ -1,5 +1,7 @@
 #include "Character.hpp"
 #include <iostream>
+#include "../Sounds/SoundNode.hpp"
+
 Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& textures)
     : setArrowAim(),
       fireArrow(),
@@ -145,6 +147,17 @@ Textures::ID Character::toTextureId(Character::Arch arch) {
   }
 }
 
+void Character::playLocalSound(CommandQueue& commands, SoundEffect::ID effect) {
+  sf::Vector2f worldPosition = getWorldPosition();
+
+  Command command;
+  command.category = Category::SoundEffect;
+  command.action = derivedAction<SoundNode>(
+      [effect, worldPosition](SoundNode& node, sf::Time) { node.playSound(effect, worldPosition); });
+
+  commands.push(command);
+}
+
 Textures::ID Character::toTextureIdAnim(Character::_animationState state) {
   switch (_playerNumber) {
     case 1:
@@ -287,6 +300,7 @@ void Character::aim(unsigned int y, unsigned int x, CommandQueue& commands) {
   // Creating the command
   setArrowAim.action = derivedAction<VisualArrow>(AimArrow(_arrowPosition, _arrowRotation));
   commands.push(setArrowAim);
+  playLocalSound(commands, SoundEffect::MenuStart);
 }
 
 void Character::createProjectile(SceneNode& node, const TextureHolder& textures) const {
@@ -309,6 +323,7 @@ void Character::fire() {
 void Character::checkProjectileLaunch(sf::Time dt, CommandQueue& commands) {
   if (_firing && _countdown <= sf::Time::Zero) {
     commands.push(fireArrow);
+    playLocalSound(commands, SoundEffect::ArrowFire);
     _countdown += sf::seconds(1.f / 10.f);
     _firing = false;
     _arrowQuantity--;

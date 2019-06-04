@@ -6,7 +6,7 @@ Projectile::Projectile(const TextureHolder& textures, float rotation, sf::Vector
   switch (static_cast<int>(rotation)) {
     case 0:
       velocity.x = 300.f;
-      velocity.y = 250.f;
+      velocity.y = -50.f;
       break;
     case 45:
       velocity.x = 300.f;
@@ -18,11 +18,11 @@ Projectile::Projectile(const TextureHolder& textures, float rotation, sf::Vector
       break;
     case 90:
       velocity.x = 0.f;
-      velocity.y = 300.f;
+      velocity.y = 600.f;
       break;
     case -90:
       velocity.x = 0.f;
-      velocity.y = -300.f;
+      velocity.y = -900.f;
       break;
     case 135:
       velocity.x = -300.f;
@@ -30,11 +30,11 @@ Projectile::Projectile(const TextureHolder& textures, float rotation, sf::Vector
       break;
     case 180:
       velocity.x = -300.f;
-      velocity.y = 250.f;
+      velocity.y = -50.f;
       break;
     case 225:
       velocity.x = -300.f;
-      velocity.y = 250.f;
+      velocity.y = -250.f;
       break;
     default:
       velocity.x = 0.f;
@@ -61,10 +61,21 @@ void Projectile::updateCurrent(sf::Time dt, CommandQueue& commands) {
     velocity.x += _initx / 8;
     float angle = _rotation * -velocity.y / 20000;
 
-    if (_rotation == 45 || _rotation == 135 || _rotation == 90)
-      setRotation((angle * 180.0 / M_PI) * -1);
-    else
-      setRotation(angle * 180.0 / M_PI);
+    switch ((int)_rotation) {
+      case 0:
+      case 90:
+      case -90:
+      case 180:
+      case 135:
+      case 225:
+        setRotation(_rotation);
+        break;
+      case 45:
+        setRotation(angle * -180.0 / M_PI);
+        break;
+      default:
+        setRotation(angle * 180.0 / M_PI);
+    }
 
     setVelocity(velocity);
     MovableEntity::updateCurrent(dt, commands);

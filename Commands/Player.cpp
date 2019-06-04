@@ -1,5 +1,7 @@
 #include "Player.hpp"
+#include "../Sounds/SoundNode.hpp"
 #include <iostream>
+
 struct MovePlayer {
   // Variable Declerations
   sf::Vector2f velocity;

@@ -38,6 +38,7 @@ World::World(sf::RenderWindow& window, SoundPlayer& sounds)
       _mapArray = mapFour;
       break;
   }
+  _randValue = rand() % 4;
   if (hasWon()) {
     std::cout << "won" << std::endl;
   }

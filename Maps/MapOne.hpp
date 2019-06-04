@@ -6,12 +6,12 @@
 
 std::array<std::array<Textures::WallSpecific, 24>, 18> mapOne = {
     {{Textures::WallSpecific::Solid, Textures::WallSpecific::Solid, Textures::WallSpecific::Solid,
-      Textures::WallSpecific::None,  Textures::WallSpecific::None,  Textures::WallSpecific::Solid,
       Textures::WallSpecific::Solid, Textures::WallSpecific::Solid, Textures::WallSpecific::Solid,
       Textures::WallSpecific::Solid, Textures::WallSpecific::Solid, Textures::WallSpecific::Solid,
       Textures::WallSpecific::Solid, Textures::WallSpecific::Solid, Textures::WallSpecific::Solid,
       Textures::WallSpecific::Solid, Textures::WallSpecific::Solid, Textures::WallSpecific::Solid,
-      Textures::WallSpecific::Solid, Textures::WallSpecific::None,  Textures::WallSpecific::None,
+      Textures::WallSpecific::Solid, Textures::WallSpecific::Solid, Textures::WallSpecific::Solid,
+      Textures::WallSpecific::Solid, Textures::WallSpecific::Solid, Textures::WallSpecific::Solid,
       Textures::WallSpecific::Solid, Textures::WallSpecific::Solid, Textures::WallSpecific::Solid},
      {Textures::WallSpecific::Solid, Textures::WallSpecific::None, Textures::WallSpecific::None,
       Textures::WallSpecific::None,  Textures::WallSpecific::None, Textures::WallSpecific::None,

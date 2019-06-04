@@ -36,6 +36,8 @@ class Character : public MovableEntity {
   // Collision Handling
   void handleWallCollision(sf::FloatRect wallBounds);
   void handleArrowCollision(bool grabbable);
+  
+  void playLocalSound(CommandQueue& commands, SoundEffect::ID effect);
 
  private:
   // Variable Declarations

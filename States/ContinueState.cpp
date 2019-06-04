@@ -12,17 +12,17 @@ ContinueState::ContinueState(StateStack& stack, Context context)
   sf::Vector2f viewSize = context.window->getView().getSize();
 
   _continueText.setFont(font);
-  _continueText.setString("CONTINUE?");
+  _continueText.setString("AGAIN?");
   _continueText.setCharacterSize(40);
   centerOrigin(_continueText);
-  _continueText.setPosition(0.5f * viewSize.x, 0.4f * viewSize.y);
+  _continueText.setPosition(0.5f * viewSize.x, 0.5f * viewSize.y);
 
   sf::Text continueOption;
   continueOption.setFont(font);
   continueOption.setString("Yes");
   centerOrigin(continueOption);
   continueOption.setCharacterSize(16);
-  continueOption.setPosition(_continueText.getPosition() + sf::Vector2f(-40.f, 50.f));
+  continueOption.setPosition(_continueText.getPosition() + sf::Vector2f(-30.f, 70.f));
   _Options.push_back(continueOption);
 
   sf::Text exitOption;
@@ -30,7 +30,7 @@ ContinueState::ContinueState(StateStack& stack, Context context)
   exitOption.setString("No");
   centerOrigin(exitOption);
   exitOption.setCharacterSize(16);
-  exitOption.setPosition(continueOption.getPosition() + sf::Vector2f(50.f, 0.f));
+  exitOption.setPosition(continueOption.getPosition() + sf::Vector2f(70.f, 0.f));
   _Options.push_back(exitOption);
 
   updateOptionText();
