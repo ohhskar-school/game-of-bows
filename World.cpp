@@ -25,6 +25,7 @@ World::World(sf::RenderWindow& window)
   switch (_randValue) {
     case 0:
       _mapArray = mapOne;
+      break;
     case 1:
       _mapArray = mapTwo;
       break;
