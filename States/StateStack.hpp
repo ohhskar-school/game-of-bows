@@ -16,7 +16,7 @@
 namespace sf {
 class Event;
 class RenderWindow;
-}  // namespace sf
+}
 
 class StateStack : private sf::NonCopyable {
  public:

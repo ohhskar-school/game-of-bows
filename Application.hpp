@@ -3,6 +3,8 @@
 
 #include "Commands/Player.hpp"
 #include "ResourceManager.hpp"
+#include "Sounds/MusicPlayer.hpp"
+#include "Sounds/SoundPlayer.hpp"
 #include "States/StateStack.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -30,6 +32,8 @@ class Application {
   FontHolder _Fonts;
   Player _Player;
 
+  MusicPlayer _Music;
+  SoundPlayer _Sounds;
   StateStack _StateStack;
 
   sf::Text _StatisticsText;

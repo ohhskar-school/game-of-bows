@@ -6,14 +6,15 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
 
-ContinueState::ContinueState(StateStack& stack, Context context) : State(stack, context), _BackgroundSprite() {
+ContinueState::ContinueState(StateStack& stack, Context context)
+    : State(stack, context), _BackgroundSprite(), _Options(), _OptionIndex(0) {
   sf::Font& font = context.fonts->get(Fonts::Main);
   sf::Vector2f viewSize = context.window->getView().getSize();
 
   sf::Text winner;
   winner.setFont(font);
   winner.setString("Player has won!");
-  winner.setCharacterSize(40);
+  winner.setCharacterSize(16);
   centerOrigin(winner);
   winner.setPosition(0.5f * viewSize.x, 0.4f * viewSize.y);
 
@@ -50,7 +51,7 @@ bool ContinueState::handleEvent(const sf::Event& event) {
 
   if (event.key.code == sf::Keyboard::Return) {
     if (_OptionIndex == Continue) {
-      requestStackPop();
+      requestStateClear();
       requestStackPush(States::Game);
     } else if (_OptionIndex == Exit) {
       // The exit option was chosen, by removing itself, the stack will be empty, and the game will know it is time to

@@ -50,7 +50,7 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
   virtual bool isDestroyed() const;
   void removeArrows();
 
-  bool hasWon() const;
+  void hasWon(bool& check) const;
 
  private:
   // Variable Declerations

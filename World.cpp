@@ -5,7 +5,7 @@
 // #include "Maps/MapThree.hpp"
 // #include "Maps/MapTwo.hpp"
 
-World::World(sf::RenderWindow& window)
+World::World(sf::RenderWindow& window, SoundPlayer& sounds)
     : _window(window),
       _worldView(window.getDefaultView()),
       _worldBounds(0.f, 0.f, _worldView.getSize().x, _worldView.getSize().y),
@@ -15,9 +15,12 @@ World::World(sf::RenderWindow& window)
       _sceneGraph(),
       _sceneLayers(),
       _textures(),
+      _sounds(sounds),
       _player1(nullptr),
       _player2(nullptr),
-      _commandQueue() {
+      _commandQueue(),
+      _hasWonDefault(false),
+      _hasWonCheck(_hasWonDefault) {
   srand((unsigned)time(0));
   _randValue = rand() % 4;
   switch (_randValue) {
@@ -33,7 +36,9 @@ World::World(sf::RenderWindow& window)
       _mapArray = mapFour;
       break;
   }
-
+  if (hasWon()) {
+    std::cout << "won" << std::endl;
+  }
   loadTextures();
   buildScene();
   _worldView.setCenter(_worldView.getSize().x / 2.f, _worldView.getSize().y / 2.f);
@@ -143,14 +148,14 @@ void World::buildScene() {
   _player1->attachChild(std::move(arrowSprite1));
 
   // Adding Player 2
-  // std::unique_ptr<Character> player2(new Character(Character::Arch::Archer, 2, _textures));
-  // _player2 = player2.get();
-  // _player2->setPosition(_spawnPosition2);
-  // _player2->setVelocity(0.f, 0.f);
-  // _sceneLayers[Ground]->attachChild(std::move(player2));
+  std::unique_ptr<Character> player2(new Character(Character::Arch::Archer, 2, _textures));
+  _player2 = player2.get();
+  _player2->setPosition(_spawnPosition2);
+  _player2->setVelocity(0.f, 0.f);
+  _sceneLayers[Ground]->attachChild(std::move(player2));
 
-  // std::unique_ptr<VisualArrow> arrowSprite2(new VisualArrow(arrowTexture, arrowTextureRect, 2));
-  // _player2->attachChild(std::move(arrowSprite2));
+  std::unique_ptr<VisualArrow> arrowSprite2(new VisualArrow(arrowTexture, arrowTextureRect, 2));
+  _player2->attachChild(std::move(arrowSprite2));
 
   // Adding Arrow Holder
   std::unique_ptr<ArrowHolder> arrow(new ArrowHolder());
@@ -168,11 +173,18 @@ void World::update(sf::Time dt) {
     _sceneGraph.onCommand(_commandQueue.pop(), dt);
   }
   handleCollisions();
-  if (hasWon()) {
-    std::cout << "won" << std::endl;
-  }
+  hasWonFinder();
   _sceneLayers[Foreground]->removeArrows();
   _sceneGraph.update(dt, _commandQueue);
+  updateSounds();
+}
+
+void World::updateSounds() {
+  // Set listener's position to player position
+  // _Sounds.setListenerPosition(mPlayerAircraft->getWorldPosition());
+
+  // Remove unused sounds
+  _sounds.removeStoppedSounds();
 }
 
 // Getters
@@ -219,4 +231,6 @@ void World::handleCollisions() {
   }
 }
 
-// bool World::hasWon() { return _sceneLayers[Ground]->hasWon(); }
+void World::hasWonFinder() { _sceneLayers[Ground]->hasWon(_hasWonCheck); }
+
+bool World::hasWon() { return _hasWonCheck; }

@@ -15,18 +15,23 @@ class RenderWindow;
 
 class StateStack;
 class Player;
+class MusicPlayer;
+class SoundPlayer;
 
 class State {
  public:
   typedef std::unique_ptr<State> Ptr;
 
   struct Context {
-    Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player);
+    Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player, MusicPlayer& music,
+            SoundPlayer& sounds);
 
     sf::RenderWindow* window;
     TextureHolder* textures;
     FontHolder* fonts;
     Player* player;
+    MusicPlayer* music;
+    SoundPlayer* sounds;
   };
 
  public:

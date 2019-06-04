@@ -1,16 +1,17 @@
 #include "GameState.hpp"
+#include "../Sounds/MusicPlayer.hpp"
 
 GameState::GameState(StateStack& stack, Context context)
-    : State(stack, context), _World(*context.window), _Player(*context.player) {}
+    : State(stack, context), _World(*context.window, *context.sounds), _Player(*context.player) {}
 
 void GameState::draw() { _World.draw(); }
 
 bool GameState::update(sf::Time dt) {
   _World.update(dt);
 
-  // if(_World.hasWon()) {
-  //   requestStackPush(States::Continue);
-  // }
+  if(_World.hasWon()) {
+    requestStackPush(States::Continue);
+  }
 
   CommandQueue& commands = _World.getCommandQueue();
   _Player.handleRealtimeInput(commands);

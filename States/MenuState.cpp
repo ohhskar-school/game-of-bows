@@ -1,6 +1,6 @@
 #include "MenuState.hpp"
-#include "../Utilities/Utilities.hpp"
 #include "../ResourceManager.hpp"
+#include "../Utilities/Utilities.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
@@ -80,7 +80,7 @@ bool MenuState::handleEvent(const sf::Event& event) {
     } else if (_OptionIndex == About) {
       requestStackPop();
       requestStackPush(States::About);
-    }  else if (_OptionIndex == Credits) {
+    } else if (_OptionIndex == Credits) {
       requestStackPop();
       requestStackPush(States::Credits);
     } else if (_OptionIndex == Exit) {

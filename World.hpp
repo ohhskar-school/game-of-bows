@@ -23,18 +23,21 @@
 // Everything Else
 #include "ResourceManager.hpp"
 #include "SceneNode.hpp"
+#include "Sounds/SoundPlayer.hpp"
 
 class World : private sf::NonCopyable {
  public:
   // Constructors
-  explicit World(sf::RenderWindow&);
+  explicit World(sf::RenderWindow&, SoundPlayer& sounds);
 
   // Update and Draw Functions
   void update(sf::Time);
   void draw();
 
   void handleCollisions();
+  void updateSounds();
   bool hasWon();
+  void hasWonFinder();
 
   // Getters
   CommandQueue& getCommandQueue();
@@ -57,6 +60,7 @@ class World : private sf::NonCopyable {
 
   // Textures
   TextureHolder _textures;
+  SoundPlayer& _sounds;
   std::array<std::array<Textures::WallSpecific, 24>, 18> _mapArray;
 
   Character* _player1;
@@ -65,6 +69,9 @@ class World : private sf::NonCopyable {
   // commands
   CommandQueue _commandQueue;
 
+  // hasWon
+  bool _hasWonDefault;
+  bool& _hasWonCheck;
   unsigned int _randValue;
 
   void loadTextures();

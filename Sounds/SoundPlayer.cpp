@@ -1,6 +1,5 @@
 #include "SoundPlayer.hpp"
 
-
 namespace {
 // Sound coordinate system, point of view of a player in front of the screen:
 // X = left; Y = up; Z = back (out of the screen)
@@ -11,13 +10,13 @@ const float MinDistance3D = std::sqrt(MinDistance2D * MinDistance2D + ListenerZ 
 }  // namespace
 
 SoundPlayer::SoundPlayer() : _SoundBuffers(), _Sounds() {
-  _SoundBuffers.load(SoundEffect::MenuStart, "../Assets/sfx/start.wav");
-  _SoundBuffers.load(SoundEffect::ArrowRecover, "../Assets/sfx/arrowRecover.wav");
-  _SoundBuffers.load(SoundEffect::ArrowFire, "../Assets/sfx/fireArrow.wav");
-  _SoundBuffers.load(SoundEffect::PlayerJump, "../Assets/sfx/playerJump.wav");
-  _SoundBuffers.load(SoundEffect::PlayerDeath, "../Assets/sfx/playerDeath.wav");
-  _SoundBuffers.load(SoundEffect::PlayerLand, "../Assets/sfx/playerLand.wav");
-  _SoundBuffers.load(SoundEffect::PlayerReady, "../Assets/sfx/playerReady.wav");
+  _SoundBuffers.load(SoundEffect::MenuStart, "Assets/sfx/start.wav");
+  _SoundBuffers.load(SoundEffect::ArrowRecover, "Assets/sfx/arrowRecover.wav");
+  _SoundBuffers.load(SoundEffect::ArrowFire, "Assets/sfx/fireArrow.wav");
+  _SoundBuffers.load(SoundEffect::PlayerJump, "Assets/sfx/playerJump.wav");
+  _SoundBuffers.load(SoundEffect::PlayerDeath, "Assets/sfx/playerDeath.wav");
+  _SoundBuffers.load(SoundEffect::PlayerLand, "Assets/sfx/playerLand.wav");
+  _SoundBuffers.load(SoundEffect::PlayerReady, "Assets/sfx/playerReady.wav");
   // Listener points towards the screen (default in SFML)
   sf::Listener::setDirection(0.f, 0.f, -1.f);
 }

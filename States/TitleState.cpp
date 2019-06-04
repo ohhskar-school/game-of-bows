@@ -1,5 +1,6 @@
-#include "State.hpp"
 #include "TitleState.hpp"
+#include "State.hpp"
+#include "../Sounds/MusicPlayer.hpp"
 
 TitleState::TitleState(StateStack& stack, Context context)
     : State(stack, context), _Text(), _ShowText(true), _TextEffectTime(sf::Time::Zero) {
@@ -10,6 +11,8 @@ TitleState::TitleState(StateStack& stack, Context context)
   centerOrigin(_Text);
   _Text.setCharacterSize(16);
   _Text.setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(150.f, 130.f));
+
+  context.music->play(Music::MenuTheme);
 }
 
 void TitleState::draw() {
