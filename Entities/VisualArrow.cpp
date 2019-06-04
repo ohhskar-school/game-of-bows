@@ -1,8 +1,8 @@
 #include "VisualArrow.hpp"
 #include <iostream>
 
-VisualArrow::VisualArrow(const sf::Texture& texture, const sf::IntRect& textureRect, unsigned int playerNumber)
-    : _sprite(texture, textureRect), _position(), _rotation(), _playerNumber(playerNumber) {}
+VisualArrow::VisualArrow(const sf::Texture& texture, unsigned int playerNumber)
+    : _sprite(texture), _position(), _rotation(), _playerNumber(playerNumber) {}
 
 // Draws
 void VisualArrow::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(_sprite, states); }
