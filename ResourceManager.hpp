@@ -2,6 +2,7 @@
 #define RC_RESOURCE
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 #include <cassert>
 #include <map>
 #include <memory>
@@ -70,6 +71,25 @@ namespace Fonts {
 enum ID { Main };
 };  // namespace Fonts
 
+namespace SoundEffect {
+enum ID {
+  AlliedGunfire,
+  EnemyGunfire,
+  Explosion1,
+  Explosion2,
+  LaunchMissile,
+  CollectPickup,
+  Button,
+};
+} // namespace SoundEffect
+
+namespace Music {
+enum ID {
+  MenuTheme,
+  MissionTheme,
+};
+} // namespace Music
+
 template <typename Resource, typename Identifier>
 class ResourceHolder {
  public:
@@ -87,5 +107,8 @@ typedef ResourceHolder<sf::Texture, Textures::ID> TextureHolder;
 
 template class ResourceHolder<sf::Font, Fonts::ID>;
 typedef ResourceHolder<sf::Font, Fonts::ID> FontHolder;
+
+template class ResourceHolder<sf::SoundBuffer, SoundEffect::ID>;
+typedef ResourceHolder<sf::SoundBuffer, SoundEffect::ID>	SoundBufferHolder;
 
 #endif

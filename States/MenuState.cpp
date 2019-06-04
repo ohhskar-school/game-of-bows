@@ -76,7 +76,7 @@ bool MenuState::handleEvent(const sf::Event& event) {
       requestStackPush(States::Game);
     } else if (_OptionIndex == Controls) {
       requestStackPop();
-      requestStackPush(States::Controls);
+      requestStackPush(States::Continue);
     } else if (_OptionIndex == About) {
       requestStackPop();
       requestStackPush(States::About);

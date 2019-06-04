@@ -7,6 +7,7 @@
 #include "States/ControlsState.hpp"
 #include "States/AboutState.hpp"
 #include "States/CreditsState.hpp"
+#include "States/ContinueState.hpp"
 #include "Utilities/Utilities.hpp"
 
 const sf::Time Application::TimePerFrame = sf::seconds(1.f / 60.f);
@@ -96,4 +97,5 @@ void Application::registerStates() {
   _StateStack.registerState<AboutState>(States::About);
   _StateStack.registerState<CreditsState>(States::Credits);
   _StateStack.registerState<GameState>(States::Game);
+  _StateStack.registerState<ContinueState>(States::Continue);
 }

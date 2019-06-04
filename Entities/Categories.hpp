@@ -14,6 +14,7 @@ enum Type {
   IgnoreWallCollide = 1 << 7,
   ArrowHolder = 1 << 8,
   Player = PlayerOne | PlayerTwo,
+  SoundEffect
 };
 }  // namespace Category
 
