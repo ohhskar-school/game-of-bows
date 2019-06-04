@@ -10,7 +10,7 @@ World::World(sf::RenderWindow& window, SoundPlayer& sounds)
       _worldView(window.getDefaultView()),
       _worldBounds(0.f, 0.f, _worldView.getSize().x, _worldView.getSize().y),
       _spawnPosition1(32.f, 64.f),
-      _spawnPosition2(128.f, 64.f),
+      _spawnPosition2(728.f, 64.f),
       _scrollSpeed(-50.f),
       _sceneGraph(),
       _sceneLayers(),
