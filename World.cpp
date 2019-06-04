@@ -2,8 +2,8 @@
 #include <iostream>
 #include "Maps/MapFour.hpp"
 #include "Maps/MapOne.hpp"
-// #include "Maps/MapThree.hpp"
-// #include "Maps/MapTwo.hpp"
+#include "Maps/MapThree.hpp"
+#include "Maps/MapTwo.hpp"
 
 World::World(sf::RenderWindow& window)
     : _window(window),
@@ -24,11 +24,12 @@ World::World(sf::RenderWindow& window)
   _randValue = rand() % 4;
   switch (_randValue) {
     case 0:
-    case 1:
       _mapArray = mapOne;
+    case 1:
+      _mapArray = mapTwo;
       break;
     case 2:
-      _mapArray = mapFour;
+      _mapArray = mapThree;
       break;
     case 3:
     default:
@@ -220,10 +221,6 @@ void World::handleCollisions() {
   }
 }
 
-void World::hasWonFinder() {
-  _sceneLayers[Ground]->hasWon(_hasWonCheck);
-}
+void World::hasWonFinder() { _sceneLayers[Ground]->hasWon(_hasWonCheck); }
 
-bool World::hasWon(){
-  return _hasWonCheck;
-}
+bool World::hasWon() { return _hasWonCheck; }
