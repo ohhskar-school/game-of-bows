@@ -70,6 +70,8 @@ class Character : public MovableEntity {
   sf::Time _countdown;
   bool _dead;
   bool _right;
+  bool _running;
+  bool _jumping;
 
   void checkProjectileLaunch(sf::Time dt, CommandQueue& commands);
   void updateDirection();

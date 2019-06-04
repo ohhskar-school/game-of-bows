@@ -7,7 +7,7 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
       _archetype(arch),
       _sprite(textures.get(toTextureId(arch)), sf::IntRect(0, 0, 32, 32)),
       _hitbox(sf::Vector2f(40.f, 32.f)),
-      
+
       _idleLeft(textures.get(toTextureIdAnim(Character::_animationState::IdleLeft))),
       _runLeft(textures.get(toTextureIdAnim(Character::_animationState::RunLeft))),
       _jumpLeft(textures.get(toTextureIdAnim(Character::_animationState::JumpLeft))),
@@ -88,50 +88,53 @@ Character::Character(Arch arch, unsigned int playerNumber, const TextureHolder& 
 // Draws and Updates
 
 void Character::updateDirection() {
+  std::cout << getJumping() << getMoving() << std::endl;
+
   if (getMoving() == 1) {
+    setCollidable(true);
     _right = false;
+    _running = true;
   } else if (getMoving() == 2) {
-    std::cout << "right" << std::endl;
+    setCollidable(true);
     _right = true;
+    _running = true;
+  } else {
+    _running = false;
+  }
+  
+  if (getJumping()) {
+    _jumping = true;
   }
 }
 
 void Character::updateCurrent(sf::Time dt, CommandQueue& commands) {
+  updateDirection();
   if (_right) {
-    if (getJumping()) {
-      _jumpRight.update(dt);
-    } else if (getMoving() != 0) {
+    if (_running) {
       _runRight.update(dt);
     } else {
       _idleRight.update(dt);
     }
   } else {
-    if (getJumping()) {
-      _jumpLeft.update(dt);
-    } else if (getMoving() != 0) {
+    if (_running) {
       _runLeft.update(dt);
     } else {
       _idleLeft.update(dt);
     }
   }
-  updateDirection();
   checkProjectileLaunch(dt, commands);
   MovableEntity::updateCurrent(dt, commands);
 }
 
 void Character::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const {
   if (_right) {
-    if (getJumping()) {
-      target.draw(_jumpRight, states);
-    } else if (getMoving() != 0) {
+    if (_running) {
       target.draw(_runRight, states);
     } else {
       target.draw(_idleRight, states);
     }
   } else {
-    if (getJumping()) {
-      target.draw(_jumpLeft, states);
-    } else if (getMoving() != 0) {
+    if (_running) {
       target.draw(_runLeft, states);
     } else {
       target.draw(_idleLeft, states);
@@ -146,7 +149,6 @@ unsigned int Character::getCategory() const {
       getCollidable() == true ? Category::Collidable : Category::Collidable | Category::IgnoreWallCollide;
 
   unsigned int dead = _dead ? Category::Dead : Category::None;
-
   switch (_playerNumber) {
     case 1:
       return (Category::PlayerOne | collidable | dead);
@@ -233,20 +235,17 @@ void Character::handleWallCollision(sf::FloatRect wallBounds) {
   float right = wallRight - ownBounds.left;
   if (top < bot && top < left && top < right) {
     move(sf::Vector2f(0.f, -top));
-    setVelocity(0.f, false);
     setCollidable(false);
-
+    setJumping(false);
+    setVelocity(0.f, false);
   } else if (bot < top && bot < left && bot < right) {
     move(sf::Vector2f(0.f, bot));
     setVelocity(0.f, false);
-    // disables wall collisions;
   } else if (left < right && left < top && left < bot) {
     move(sf::Vector2f(-left, 0.f));
-    setVelocity(0.f, true);
 
   } else if (right < left && right < top && right < bot) {
     move(sf::Vector2f(right, 0.f));
-    setVelocity(0.f, true);
   }
 
   // https://stackoverflow.com/questions/5062833/detecting-the-direction-of-a-collision
